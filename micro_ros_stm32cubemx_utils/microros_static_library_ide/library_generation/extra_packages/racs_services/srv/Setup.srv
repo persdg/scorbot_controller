@@ -1,0 +1,9 @@
+uint8 motor_index
+float32 encoder_error_divider
+float32 p
+float32 i
+float32 d
+float32 tau
+float32 sat
+---
+uint8 response

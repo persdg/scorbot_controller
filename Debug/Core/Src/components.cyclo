@@ -1,0 +1,47 @@
+/home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/std_abs.h:56:3:long int std::abs(long int)	1
+../Core/Src/components.cpp:20:1:PinControl::PinControl()	1
+../Core/Src/components.cpp:24:1:PinControl::PinControl(GPIO_TypeDef*, uint16_t)	1
+../Core/Src/components.cpp:31:1:PinControl::PinControl(GPIO_TypeDef*, uint16_t, float, float)	1
+../Core/Src/components.cpp:37:6:void PinControl::setLimits(float, float)	1
+../Core/Src/components.cpp:42:6:void PinControl::set(bool)	2
+../Core/Src/components.cpp:96:1:PinMeasure::PinMeasure()	1
+../Core/Src/components.cpp:100:1:PinMeasure::PinMeasure(GPIO_TypeDef*, uint16_t)	1
+../Core/Src/components.cpp:106:1:PinMeasure::PinMeasure(GPIO_TypeDef*, uint16_t, float, float)	1
+../Core/Src/components.cpp:113:6:void PinMeasure::setLimits(float, float)	1
+../Core/Src/components.cpp:118:6:bool PinMeasure::state()	1
+../Core/Src/components.cpp:152:1:Motor::Motor(PinControl&, PinControl&, TIM_HandleTypeDef*, uint8_t, PinMeasure&)	1
+../Core/Src/components.cpp:157:1:Motor::Motor(PinControl&, PinControl&, TIM_HandleTypeDef*, uint8_t, TIM_HandleTypeDef*, PinMeasure&)	1
+../Core/Src/components.cpp:162:1:Motor::~Motor()	1
+../Core/Src/components.cpp:168:6:long int Motor::getEncoder()	1
+../Core/Src/components.cpp:193:6:void Motor::invertMotor(bool)	1
+../Core/Src/components.cpp:196:6:void Motor::driveMotor(int16_t)	15
+../Core/Src/components.cpp:249:6:bool Motor::isInEndStop()	1
+../Core/Src/components.cpp:258:1:Robot::Robot(PinControl&, PinControl&, long unsigned int, uint8_t, Motor**, float*)	5
+../Core/Src/components.cpp:299:1:Robot::Robot(PinControl&, PinControl&, long unsigned int, uint8_t, Motor**)	1
+../Core/Src/components.cpp:302:1:Robot::Robot(PinControl&, PinControl&, long unsigned int, uint8_t)	1
+../Core/Src/components.cpp:305:1:Robot::~Robot()	5
+../Core/Src/components.cpp:319:5:int Robot::getSize()	1
+../Core/Src/components.cpp:323:15:Robot::Status Robot::getStatus()	1
+../Core/Src/components.cpp:327:6:void Robot::setStatus(Robot::Status, bool)	3
+../Core/Src/components.cpp:335:9:Motor* Robot::getMotor(uint8_t)	1
+../Core/Src/components.cpp:339:6:void Robot::setMotor(uint8_t, Motor*)	1
+../Core/Src/components.cpp:343:6:void Robot::setMotor(uint8_t, Motor*, float)	1
+../Core/Src/components.cpp:348:6:void Robot::setEncoderDivider(uint8_t, float)	1
+../Core/Src/components.cpp:352:7:PID* Robot::getPID(uint8_t)	1
+../Core/Src/components.cpp:356:6:void Robot::initPIDs(float, float, float, bool)	2
+../Core/Src/components.cpp:362:6:void Robot::setupPIDs(float, float, float)	2
+../Core/Src/components.cpp:368:6:void Robot::resetPIDs()	2
+../Core/Src/components.cpp:397:6:void Robot::setPWMs(int16_t*)	2
+../Core/Src/components.cpp:403:6:void Robot::setPWM(uint8_t, int16_t)	1
+../Core/Src/components.cpp:408:6:void Robot::resetPWMs()	2
+../Core/Src/components.cpp:429:6:void Robot::rcvCtrl(racs_services__srv__Control_Request*)	10
+../Core/Src/components.cpp:460:6:void Robot::sndCtrl(racs_services__srv__Control_Response*)	2
+../Core/Src/components.cpp:476:6:void Robot::rcvSetup(racs_services__srv__Setup_Request*)	1
+../Core/Src/components.cpp:487:6:void Robot::sndSetup(racs_services__srv__Setup_Response*)	1
+../Core/Src/components.cpp:492:6:void Robot::update()	7
+../Core/Src/components.cpp:522:6:void Robot::actuate()	2
+/home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:254:5:constexpr const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = short int]	2
+/home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:230:5:constexpr const _Tp& std::min(const _Tp&, const _Tp&) [with _Tp = short int]	2
+/home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:230:5:constexpr const _Tp& std::min(const _Tp&, const _Tp&) [with _Tp = long int]	2
+/home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:254:5:constexpr const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = float]	2
+/home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:230:5:constexpr const _Tp& std::min(const _Tp&, const _Tp&) [with _Tp = float]	2
