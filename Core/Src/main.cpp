@@ -22,9 +22,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "components.hpp"
+
 #include "stdbool.h"
 #include <micro_ros_allocators.h>
-//#include <dma_transport.h>
 #include <sys/time.h>
 
 #include <racs_services/srv/control.h>
@@ -37,7 +38,6 @@
 #include <rmw_microros/rmw_microros.h>
 #include <rmw_microxrcedds_c/config.h>
 #include <uxr/client/transport.h>
-//#include "components.hpp"
 
 /* USER CODE END Includes */
 
@@ -127,43 +127,64 @@ void setup_callback(const void* request_msg, void* response_msg){
 				(racs_services__srv__Setup_Request*) request_msg;
 		racs_services__srv__Setup_Response* res_in =
 				(racs_services__srv__Setup_Response*) response_msg;
-		res_in->response = 18;
+
+
+		res_in->response = 0b00000011;
 	}
 
-/*Robot create_robot() {
+Robot create_robot() {
 
-	INA1 = PinControl(0,0);	INB1 = PinControl(0,0);
-	INA2 = PinControl(0,0);	INB2 = PinControl(0,0);
-	INA3 = PinControl(0,0);	INB3 = PinControl(0,0);
-	INA4 = PinControl(0,0);	INB4 = PinControl(0,0);
-	INA5 = PinControl(0,0);	INB5 = PinControl(0,0);
-	INA6 = PinControl(0,0);	INB6 = PinControl(0,0);
+	PinControl mot1_ina = PinControl(PORT_MOTOR_1_INA, PIN_MOTOR_1_INA);
+	PinControl mot1_inb = PinControl(PORT_MOTOR_1_INB, PIN_MOTOR_1_INB);
+	//htimpwm
+	PinMeasure mot1_cha = PinMeasure(MOTOR_1_CHA, true);
+	PinMeasure mot1_chb = PinMeasure(MOTOR_1_CHB, true);
+	PinMeasure mot1_end = PinMeasure(MOTOR_1_END);
 
-	//PWMs
-	htimPW1 = &htim1; CCRx1 = 1;
-	htimPW2 = &htim1; CCRx1 = 2;
-	htimPW3 = &htim1; CCRx1 = 3;
-	htimPW4 = &htim1; CCRx1 = 4;
-	htimPW5 = &htim9; CCRx1 = 1;
-	htimPW6 = &htim9; CCRx1 = 2;
+	PinControl mot2_ina = PinControl(MOTOR_2_INA);
+	PinControl mot2_inb = PinControl(MOTOR_2_INB);
+	PinControl mot2_pwm = PinControl(MOTOR_2_PWM);
+	PinMeasure mot2_cha = PinMeasure(MOTOR_2_CHA, true);
+	PinMeasure mot2_chb = PinMeasure(MOTOR_2_CHB, true);
+	PinMeasure mot2_end = PinMeasure(MOTOR_2_END);
 
-	//Encoders
-	htimENC1 = &htim2;
-	htimENC2 = &htim3;
-	htimENC3 = &htim4;
-	htimENC4 = &htim5;
-	htimENC8 = &htim8;
+	PinControl mot3_ina = PinControl(MOTOR_3_INA);
+	PinControl mot3_inb = PinControl(MOTOR_3_INB);
+	PinControl mot3_pwm = PinControl(MOTOR_3_PWM);
+	PinMeasure mot3_cha = PinMeasure(MOTOR_3_CHA, true);
+	PinMeasure mot3_chb = PinMeasure(MOTOR_3_CHB, true);
+	PinMeasure mot3_end = PinMeasure(MOTOR_3_END);
 
-	Motor motor1 = Motor(INA1, INB1, htimPWM1, CCRx1, htimENC1, END1);
-	Motor motor2 = Motor(INA2, INB2, htimPWM2, CCRx2, htimENC2, END2);
-	Motor motor3 = Motor(INA3, INB3, htimPWM3, CCRx3, htimENC3, END3);
-	Motor motor4 = Motor(INA4, INB4, htimPWM4, CCRx4, htimENC4, END4);
-	Motor motor5 = Motor(INA5, INB5, htimPWM1, CCRx5, htimENC5, END5);
-	Motor motor6 = Motor(INA6, INB6, htimPWM1, CCRx6, END6);
+	PinControl mot4_ina = PinControl(MOTOR_4_INA);
+	PinControl mot4_inb = PinControl(MOTOR_4_INB);
+	PinControl mot4_pwm = PinControl(MOTOR_4_PWM);
+	PinMeasure mot4_cha = PinMeasure(MOTOR_4_CHA, true);
+	PinMeasure mot4_chb = PinMeasure(MOTOR_4_CHB, true);
+	PinMeasure mot4_end = PinMeasure(MOTOR_4_END);
 
-	Robot outRobot;
-	return outRobot;
-}*/
+	PinControl mot5_ina = PinControl(MOTOR_5_INA);
+	PinControl mot5_inb = PinControl(MOTOR_5_INB);
+	PinControl mot5_pwm = PinControl(MOTOR_5_PWM);
+	PinMeasure mot5_cha = PinMeasure(MOTOR_5_CHA, true);
+	PinMeasure mot5_chb = PinMeasure(MOTOR_5_CHB, true);
+	PinMeasure mot5_end = PinMeasure(MOTOR_5_END);
+
+	PinControl mot6_ina = PinControl(MOTOR_6_INA);
+	PinControl mot6_inb = PinControl(MOTOR_6_INB);
+	PinControl mot6_pwm = PinControl(MOTOR_6_PWM);
+	PinMeasure mot6_cha = PinMeasure(MOTOR_6_CHA, true);
+	PinMeasure mot6_chb = PinMeasure(MOTOR_6_CHB, true);
+	PinMeasure mot6_end = PinMeasure(MOTOR_6_END);
+
+	Motor motor1 = Motor(PinControl &INA, PinControl &INB,
+	  		TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
+			TIM_HandleTypeDef* htimENC, PinMeasure &END);
+	Motor motor2 = Motor(mot2_ina, mot2_inb, mot2_pwm, mot2_cha, mot2_chb, mot2_end);
+	Motor motor3 = Motor(mot3_ina, mot3_inb, mot3_pwm, mot3_cha, mot3_chb, mot3_end);
+	Motor motor4 = Motor(mot4_ina, mot4_inb, mot4_pwm, mot4_cha, mot4_chb, mot4_end);
+	Motor motor5 = Motor(mot5_ina, mot5_inb, mot5_pwm, mot5_cha, mot5_chb, mot5_end);
+	Motor motor6 = Motor(mot6_ina, mot6_inb, mot6_pwm, mot6_cha, mot6_chb, mot6_end);
+}
 /* USER CODE END 0 */
 
 /**
@@ -799,7 +820,12 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, MOTOR5_INA_Pin|MOTOR5_INB_Pin|MOTOR1_INA_Pin|MOTOR1_INB_Pin
+                          |MOTOR2_INA_Pin|MOTOR2_INB_Pin|MOTOR3_INA_Pin|MOTOR3_INB_Pin
+                          |MOTOR4_INA_Pin|MOTOR4_INB_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOG, MOTOR6_INA_Pin|MOTOR6_INB_Pin|GPIO_PIN_6, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : USER_Btn_Pin */
   GPIO_InitStruct.Pin = USER_Btn_Pin;
@@ -838,8 +864,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
   HAL_GPIO_Init(RMII_TXD1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PG6 */
-  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  /*Configure GPIO pins : MOTOR5_INA_Pin MOTOR5_INB_Pin MOTOR1_INA_Pin MOTOR1_INB_Pin
+                           MOTOR2_INA_Pin MOTOR2_INB_Pin MOTOR3_INA_Pin MOTOR3_INB_Pin
+                           MOTOR4_INA_Pin MOTOR4_INB_Pin */
+  GPIO_InitStruct.Pin = MOTOR5_INA_Pin|MOTOR5_INB_Pin|MOTOR1_INA_Pin|MOTOR1_INB_Pin
+                          |MOTOR2_INA_Pin|MOTOR2_INB_Pin|MOTOR3_INA_Pin|MOTOR3_INB_Pin
+                          |MOTOR4_INA_Pin|MOTOR4_INB_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : MOTOR6_INA_Pin MOTOR6_INB_Pin PG6 */
+  GPIO_InitStruct.Pin = MOTOR6_INA_Pin|MOTOR6_INB_Pin|GPIO_PIN_6;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

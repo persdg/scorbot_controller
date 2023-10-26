@@ -8,7 +8,6 @@ C_SRCS += \
 ../Core/Src/custom_memory_manager.c \
 ../Core/Src/dma_transport.c \
 ../Core/Src/freertos.c \
-../Core/Src/main.c \
 ../Core/Src/microros_allocators.c \
 ../Core/Src/microros_time.c \
 ../Core/Src/stm32f7xx_hal_msp.c \
@@ -22,6 +21,7 @@ CPP_SRCS += \
 ../Core/Src/communication.cpp \
 ../Core/Src/components.cpp \
 ../Core/Src/control.cpp \
+../Core/Src/main.cpp \
 ../Core/Src/robot.cpp \
 ../Core/Src/utils.cpp 
 
@@ -29,7 +29,6 @@ C_DEPS += \
 ./Core/Src/custom_memory_manager.d \
 ./Core/Src/dma_transport.d \
 ./Core/Src/freertos.d \
-./Core/Src/main.d \
 ./Core/Src/microros_allocators.d \
 ./Core/Src/microros_time.d \
 ./Core/Src/stm32f7xx_hal_msp.d \
@@ -62,6 +61,7 @@ CPP_DEPS += \
 ./Core/Src/communication.d \
 ./Core/Src/components.d \
 ./Core/Src/control.d \
+./Core/Src/main.d \
 ./Core/Src/robot.d \
 ./Core/Src/utils.d 
 

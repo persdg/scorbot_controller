@@ -1,4 +1,4 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
@@ -43,7 +43,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../Core/Inc/micro_ros_allocators.h \
+ ../Core/Src/components.hpp ../Core/Src/utils.hpp ../Core/Src/control.hpp \
+ ../Core/Src/communication.hpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/control.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/control__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/primitives_sequence.h \
@@ -75,6 +76,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h \
+ ../Core/Inc/micro_ros_allocators.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcl/error_handling.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/error_handling.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/snprintf.h \
@@ -277,7 +279,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
-../Core/Inc/micro_ros_allocators.h:
+../Core/Src/components.hpp:
+../Core/Src/utils.hpp:
+../Core/Src/control.hpp:
+../Core/Src/communication.hpp:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/control.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/control__struct.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/primitives_sequence.h:
@@ -309,6 +314,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__struct.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h:
+../Core/Inc/micro_ros_allocators.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcl/error_handling.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/error_handling.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/snprintf.h:
