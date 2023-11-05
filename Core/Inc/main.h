@@ -49,8 +49,6 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -227,6 +225,9 @@ void Error_Handler(void);
 #define PID_6_KD    0.0     // Motor 6 PID derivative coefficient
 #define PID_6_POLE  10.0    // Motor 6 PID dirty derivative pole
 #define PID_6_SAT   100.0   // Motor 6 PID integral saturation
+
+void control_callback(const void* request_msg, void* response_msg);
+void setup_callback(const void* request_msg, void* response_msg);
 
 /* USER CODE END Private defines */
 
