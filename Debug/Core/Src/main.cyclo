@@ -1,6 +1,7 @@
-../Core/Src/main.c:79:6:control_callback	1
-../Core/Src/main.c:87:6:setup_callback	1
-../Core/Src/main.c:156:5:main	1
-../Core/Src/main.c:217:6:SystemClock_Config	4
-../Core/Src/main.c:282:6:HAL_TIM_PeriodElapsedCallback	2
-../Core/Src/main.c:299:6:Error_Handler	1
+../Core/Src/main.cpp:83:6:void control_callback(const void*, void*)	1
+../Core/Src/main.cpp:91:6:void setup_callback(const void*, void*)	1
+../Core/Src/main.cpp:101:7:Robot create_robot()	1
+../Core/Src/main.cpp:173:5:int main()	1
+../Core/Src/main.cpp:234:6:void SystemClock_Config()	4
+../Core/Src/main.cpp:299:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	2
+../Core/Src/main.cpp:316:6:void Error_Handler()	1

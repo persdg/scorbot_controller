@@ -27,6 +27,21 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "components.hpp"
+
+#include <sys/time.h>
+#include <dma_transport.h>
+
+#include <racs_services/srv/control.h>
+#include <racs_services/srv/setup.h>
+#include <rcl/error_handling.h>
+#include <rcl/rcl.h>
+#include <rclc/executor.h>
+#include <rclc/rclc.h>
+#include <rmw_microros/custom_transport.h>
+#include <rmw_microros/rmw_microros.h>
+#include <rmw_microxrcedds_c/config.h>
+#include <uxr/client/transport.h>
 
 /* USER CODE END Includes */
 
@@ -48,7 +63,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+#ifdef __cplusplus
+ extern "C" {
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,10 +74,96 @@ void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
-
+#ifdef __cplusplus
+}
+#endif
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+void control_callback(const void* request_msg, void* response_msg){
+		racs_services__srv__Control_Request* req_in =
+				(racs_services__srv__Control_Request*) request_msg;
+		racs_services__srv__Control_Response* res_in =
+				(racs_services__srv__Control_Response*) response_msg;
+		//logica
+	}
+
+void setup_callback(const void* request_msg, void* response_msg){
+		racs_services__srv__Setup_Request* req_in =
+				(racs_services__srv__Setup_Request*) request_msg;
+		racs_services__srv__Setup_Response* res_in =
+				(racs_services__srv__Setup_Response*) response_msg;
+
+
+		res_in->response = 0b00000011;
+	}
+
+Robot create_robot() {
+
+	PinControl mot1_ina = PinControl(MOTOR1_INA_GPIO_Port, MOTOR1_INA_Pin);
+	PinControl mot1_inb = PinControl(MOTOR1_INB_GPIO_Port, MOTOR1_INB_Pin);
+//	PinControl mot1_pwm = PinControl(MOTOR1_PWM_GPIO_Port, MOTOR1_PWM_Pin);
+//	PinMeasure mot1_cha = PinMeasure(MOTOR1_CHA_GPIO_Port, MOTOR1_CHA_Pin);
+//	PinMeasure mot1_chb = PinMeasure(MOTOR1_CHB_GPIO_Port, MOTOR1_CHB_Pin);
+	PinMeasure mot1_end = PinMeasure(MOTOR1_END_GPIO_Port, MOTOR1_END_Pin);
+
+	PinControl mot2_ina = PinControl(MOTOR2_INA_GPIO_Port, MOTOR2_INA_Pin);
+	PinControl mot2_inb = PinControl(MOTOR2_INB_GPIO_Port, MOTOR2_INB_Pin);
+//	PinControl mot2_pwm = PinControl(MOTOR2_PWM_GPIO_Port, MOTOR2_PWM_Pin);
+//	PinMeasure mot2_cha = PinMeasure(MOTOR2_CHA_GPIO_Port, MOTOR2_CHA_Pin);
+//	PinMeasure mot2_chb = PinMeasure(MOTOR2_CHB_GPIO_Port, MOTOR2_CHB_Pin);
+	PinMeasure mot2_end = PinMeasure(MOTOR2_END_GPIO_Port, MOTOR2_END_Pin);
+
+	PinControl mot3_ina = PinControl(MOTOR3_INA_GPIO_Port, MOTOR3_INA_Pin);
+	PinControl mot3_inb = PinControl(MOTOR3_INB_GPIO_Port, MOTOR3_INB_Pin);
+//	PinControl mot3_pwm = PinControl(MOTOR3_PWM_GPIO_Port, MOTOR3_PWM_Pin);
+//	PinMeasure mot3_cha = PinMeasure(MOTOR3_CHA_GPIO_Port, MOTOR3_CHA_Pin);
+//	PinMeasure mot3_chb = PinMeasure(MOTOR3_CHB_GPIO_Port, MOTOR3_CHB_Pin);
+	PinMeasure mot3_end = PinMeasure(MOTOR3_END_GPIO_Port, MOTOR3_END_Pin);
+
+	PinControl mot4_ina = PinControl(MOTOR4_INA_GPIO_Port, MOTOR4_INA_Pin);
+	PinControl mot4_inb = PinControl(MOTOR4_INB_GPIO_Port, MOTOR4_INB_Pin);
+//	PinControl mot4_pwm = PinControl(MOTOR4_PWM_GPIO_Port, MOTOR4_PWM_Pin);
+//	PinMeasure mot4_cha = PinMeasure(MOTOR4_CHA_GPIO_Port, MOTOR4_CHA_Pin);
+//	PinMeasure mot4_chb = PinMeasure(MOTOR4_CHB_GPIO_Port, MOTOR4_CHB_Pin);
+	PinMeasure mot4_end = PinMeasure(MOTOR4_END_GPIO_Port, MOTOR4_END_Pin);
+
+	PinControl mot5_ina = PinControl(MOTOR5_INA_GPIO_Port, MOTOR5_INA_Pin);
+	PinControl mot5_inb = PinControl(MOTOR5_INB_GPIO_Port, MOTOR5_INB_Pin);
+//	PinControl mot5_pwm = PinControl(MOTOR5_PWM_GPIO_Port, MOTOR5_PWM_Pin);
+//	PinMeasure mot5_cha = PinMeasure(MOTOR5_CHA_GPIO_Port, MOTOR5_CHA_Pin);
+//	PinMeasure mot5_chb = PinMeasure(MOTOR5_CHB_GPIO_Port, MOTOR5_CHB_Pin);
+	PinMeasure mot5_end = PinMeasure(MOTOR5_END_GPIO_Port, MOTOR5_END_Pin);
+
+	PinControl mot6_ina = PinControl(MOTOR6_INA_GPIO_Port, MOTOR6_INA_Pin);
+	PinControl mot6_inb = PinControl(MOTOR6_INB_GPIO_Port, MOTOR6_INB_Pin);
+//	PinControl mot6_pwm = PinControl(MOTOR6_PWM_GPIO_Port, MOTOR6_PWM_Pin);
+//	PinMeasure mot6_cha = PinMeasure(MOTOR6_CHA_GPIO_Port, MOTOR6_CHA_Pin);
+//	PinMeasure mot6_chb = PinMeasure(MOTOR6_CHB_GPIO_Port, MOTOR6_CHB_Pin);
+	PinMeasure mot6_end = PinMeasure(MOTOR6_END_GPIO_Port, MOTOR6_END_Pin);
+
+	PinControl enable = PinControl(MOTORS_EN_GPIO_Port, MOTORS_EN_Pin);
+	PinControl toggle = PinControl(PIN_TOGGLE_GPIO_Port, PIN_TOGGLE_Pin);
+
+	Motor motor1 = Motor(mot1_ina, mot1_inb, &htim1, 1, &htim2, mot1_end);
+	Motor motor2 = Motor(mot2_ina, mot2_inb, &htim1, 2, &htim3, mot2_end);
+	Motor motor3 = Motor(mot3_ina, mot3_inb, &htim1, 3, &htim4, mot3_end);
+	Motor motor4 = Motor(mot4_ina, mot4_inb, &htim1, 4, &htim5, mot4_end);
+	Motor motor5 = Motor(mot5_ina, mot5_inb, &htim9, 1, &htim8, mot5_end);
+	Motor motor6 = Motor(mot6_ina, mot6_inb, &htim9, 2, mot6_end);
+
+	Motor** motors = (Motor**) malloc(sizeof(Motor)*6);
+	float* encs_div = (float*) malloc(sizeof(float)*6);
+
+	motors[0] = &motor1; motors[1] = &motor2; motors[2] = &motor3; motors[3] = &motor4; motors[4] = &motor5; motors[5] = &motor6;
+	encs_div[0] = 1; encs_div[1] = 1; encs_div[2] = 1; encs_div[3] = 1; encs_div[4] = 1; encs_div[5] = 1;
+
+	Robot myRobot = Robot(enable, toggle, 10, 6, motors, encs_div);
+
+//  Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div);
+
+	return myRobot;
+}
 /* USER CODE END 0 */
 
 /**
