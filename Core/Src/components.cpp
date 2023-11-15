@@ -4,14 +4,11 @@
  * l'attributo error_div deve essere rimosso
  */
 
-#include "components.hpp"
+#include <components.hpp>
 
 //#include <algorithm>
 
 
-// ==================================================
-// PWMfreq
-// ==================================================
 // ==================================================
 // PinControl
 // ==================================================
@@ -168,27 +165,6 @@ long Motor::getEncoder(){
   return htimENC->Instance->CNT;
 }
 
-/*void Motor::setEncoder(long value){
-  this->encoder = value;
-}
-
-void Motor::readEncoder(){
-  enc_A = pin_CHA.state();
-  enc_B = pin_CHB.state();
-}
-
-void Motor::updateEncoder(){
-  bool old_A = enc_A;
-  readEncoder();
-  if(old_A != enc_A){
-    if(enc_B == enc_A) {
-      encoder_invert ? encoder-- : encoder++;
-    } else {
-      encoder_invert ? encoder++ : encoder--;
-    }
-  }
-}
-*/
 void Motor::invertMotor(bool invert){
   this->motor_invert = invert;
 }
@@ -472,7 +448,7 @@ void Robot::sndCtrl(racs_services__srv__Control_Response* response){
   //Communication::snd(snd_ctrl);
 }
 
-void Robot::rcvSetup(racs_services__srv__Setup_Request* request){
+void Robot::(racs_services__srv__Setup_Request* request){
   //Communication::rcv(rcv_setup);
 
   setEncoderDivider(request->motor_index, request->encoder_error_divider);
@@ -563,3 +539,51 @@ void Robot::actuate(){
   }
 }*/
 
+Robot create_robot() {
+
+	PinControl mot1_ina = PinControl(MOTOR1_INA_GPIO_Port, MOTOR1_INA_Pin);
+	PinControl mot1_inb = PinControl(MOTOR1_INB_GPIO_Port, MOTOR1_INB_Pin);
+	PinMeasure mot1_end = PinMeasure(MOTOR1_END_GPIO_Port, MOTOR1_END_Pin);
+
+	PinControl mot2_ina = PinControl(MOTOR2_INA_GPIO_Port, MOTOR2_INA_Pin);
+	PinControl mot2_inb = PinControl(MOTOR2_INB_GPIO_Port, MOTOR2_INB_Pin);
+	PinMeasure mot2_end = PinMeasure(MOTOR2_END_GPIO_Port, MOTOR2_END_Pin);
+
+	PinControl mot3_ina = PinControl(MOTOR3_INA_GPIO_Port, MOTOR3_INA_Pin);
+	PinControl mot3_inb = PinControl(MOTOR3_INB_GPIO_Port, MOTOR3_INB_Pin);
+	PinMeasure mot3_end = PinMeasure(MOTOR3_END_GPIO_Port, MOTOR3_END_Pin);
+
+	PinControl mot4_ina = PinControl(MOTOR4_INA_GPIO_Port, MOTOR4_INA_Pin);
+	PinControl mot4_inb = PinControl(MOTOR4_INB_GPIO_Port, MOTOR4_INB_Pin);
+	PinMeasure mot4_end = PinMeasure(MOTOR4_END_GPIO_Port, MOTOR4_END_Pin);
+
+	PinControl mot5_ina = PinControl(MOTOR5_INA_GPIO_Port, MOTOR5_INA_Pin);
+	PinControl mot5_inb = PinControl(MOTOR5_INB_GPIO_Port, MOTOR5_INB_Pin);
+	PinMeasure mot5_end = PinMeasure(MOTOR5_END_GPIO_Port, MOTOR5_END_Pin);
+
+	PinControl mot6_ina = PinControl(MOTOR6_INA_GPIO_Port, MOTOR6_INA_Pin);
+	PinControl mot6_inb = PinControl(MOTOR6_INB_GPIO_Port, MOTOR6_INB_Pin);
+	PinMeasure mot6_end = PinMeasure(MOTOR6_END_GPIO_Port, MOTOR6_END_Pin);
+
+	PinControl enable = PinControl(MOTORS_EN_GPIO_Port, MOTORS_EN_Pin);
+	PinControl toggle = PinControl(PIN_TOGGLE_GPIO_Port, PIN_TOGGLE_Pin);
+
+	Motor motor1 = Motor(mot1_ina, mot1_inb, &htim1, 1, &htim2, mot1_end);
+	Motor motor2 = Motor(mot2_ina, mot2_inb, &htim1, 2, &htim3, mot2_end);
+	Motor motor3 = Motor(mot3_ina, mot3_inb, &htim1, 3, &htim4, mot3_end);
+	Motor motor4 = Motor(mot4_ina, mot4_inb, &htim1, 4, &htim5, mot4_end);
+	Motor motor5 = Motor(mot5_ina, mot5_inb, &htim9, 1, &htim8, mot5_end);
+	Motor motor6 = Motor(mot6_ina, mot6_inb, &htim9, 2, 		mot6_end);
+
+	Motor** motors = (Motor**) malloc(sizeof(Motor*)*6);
+	float* encs_div = (float*) malloc(sizeof(float)*6);
+
+	motors[0] = &motor1; motors[1] = &motor2; motors[2] = &motor3; motors[3] = &motor4; motors[4] = &motor5; motors[5] = &motor6;
+	encs_div[0] = 1; encs_div[1] = 1; encs_div[2] = 1; encs_div[3] = 1; encs_div[4] = 1; encs_div[5] = 1;
+
+	Robot myRobot = Robot(enable, toggle, 10, 6, motors, encs_div);
+
+	return myRobot;
+}
+
+Robot ScorBot = create_robot();

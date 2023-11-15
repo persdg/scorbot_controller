@@ -40,6 +40,8 @@
 #include "usart.h"
 #include <dma_transport.h>
 #include <micro_ros_allocators.h>
+#include <components.hpp>
+#include <callbacks.hpp>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,7 +61,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+extern Robot ScorBot;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -145,16 +147,21 @@ void StartDefaultTask(void *argument)
 	if (!rcutils_set_default_allocator(&freeRTOS_allocator)) return;
 
 	rcl_ret_t rc;
-	rcl_node_t node; // nodo;
+	rcl_node_t node, debug_node; // nodo;
+	//rcl_publisher_t debug;
 	rcl_service_t setup_service, control_service; //servizi
+	//const char* debug_topic_name = "/rosout";
 	const char* setup_service_name = "/setup";
 	const char* control_service_name = "/control"; //nomi dei servizi
+	//const rosidl_message_type_support_t * debug_type_support;
 	const rosidl_service_type_support_t* setup_type_support =
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Setup);
 	const rosidl_service_type_support_t* control_type_support =
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Control);
 	rclc_support_t support;// support_p;
 	rcl_allocator_t allocator;// allocator_p;
+
+	//Robot ScorBot = create_robot();
 
 	racs_services__srv__Setup_Request req_setup;
 	racs_services__srv__Setup_Response res_setup;

@@ -1,0 +1,2 @@
+../Core/Src/callbacks.cpp:3:6:void control_callback(const void*, void*)	24	static
+../Core/Src/callbacks.cpp:11:6:void setup_callback(const void*, void*)	24	static

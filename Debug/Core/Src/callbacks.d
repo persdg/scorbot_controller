@@ -1,4 +1,4 @@
-Core/Src/robot.o: ../Core/Src/robot.cpp ../Core/Src/robot.hpp \
+Core/Src/callbacks.o: ../Core/Src/callbacks.cpp ../Core/Inc/callbacks.hpp \
  ../Core/Inc/components.hpp ../Core/Inc/utils.hpp ../Core/Inc/control.hpp \
  ../Core/Inc/communication.hpp ../Core/Inc/utils.hpp ../Core/Inc/main.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
@@ -66,7 +66,7 @@ Core/Src/robot.o: ../Core/Src/robot.cpp ../Core/Src/robot.hpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h \
  ../Core/Inc/tim.h
-../Core/Src/robot.hpp:
+../Core/Inc/callbacks.hpp:
 ../Core/Inc/components.hpp:
 ../Core/Inc/utils.hpp:
 ../Core/Inc/control.hpp:

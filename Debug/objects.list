@@ -1,3 +1,4 @@
+"./Core/Src/callbacks.o"
 "./Core/Src/communication.o"
 "./Core/Src/components.o"
 "./Core/Src/control.o"

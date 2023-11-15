@@ -1,8 +1,3 @@
-/*
- * COSE DA FARE:
- * -Includere utils.h e control.h appena li faccio
- */
-
 #ifndef COMPONENTS_H
 #define COMPONENTS_H
 
@@ -10,13 +5,14 @@
 
 #include <cstdint>
 #include <math.h>
-#include "utils.hpp"
-#include "control.hpp"
-#include "communication.hpp"
+#include <utils.hpp>
+#include <control.hpp>
+#include <communication.hpp>
 #include "main.h"
 #include <racs_services/srv/control.h>
 #include <racs_services/srv/setup.h>
 #include "utils.hpp"
+#include "tim.h"
 
 class PinControl {
 public:
@@ -213,5 +209,6 @@ private:
   Communication::RCVsetup *rcv_setup;   // Setup response data
 };
 
+Robot create_robot();
 
 #endif  // COMPONENTS_H

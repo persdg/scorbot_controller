@@ -80,8 +80,8 @@ all:
 main-build: scorbot_controller.elf secondary-outputs
 
 # Tool invocations
-scorbot_controller.elf scorbot_controller.map: $(OBJS) $(USER_OBJS) /home/ubuntu/STM32CubeIDE/workspace_1.11.2/scorbot_controller/STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "scorbot_controller.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/home/ubuntu/STM32CubeIDE/workspace_1.11.2/scorbot_controller/STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="scorbot_controller.map" -Wl,--gc-sections -static -L../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+scorbot_controller.elf scorbot_controller.map: $(OBJS) $(USER_OBJS) /home/persdg/Documents/universita/tesi/RACS/scorbot_controller/STM32F767ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "scorbot_controller.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/home/persdg/Documents/universita/tesi/RACS/scorbot_controller/STM32F767ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="scorbot_controller.map" -Wl,--gc-sections -static -L../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -101,7 +101,7 @@ clean:
 	-@echo ' '
 
 pre-build:
-	docker pull microros/micro_ros_static_library_builder:iron && docker run --rm -v /home/ubuntu/STM32CubeIDE/workspace_1.11.2/scorbot_controller:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:iron
+	docker pull microros/micro_ros_static_library_builder:iron && docker run --rm -v /home/persdg/Documents/universita/tesi/RACS/scorbot_controller:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_stm32cubemx_utils/microros_static_library_ide microros/micro_ros_static_library_builder:iron
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
