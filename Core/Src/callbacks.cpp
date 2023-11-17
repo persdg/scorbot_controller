@@ -15,5 +15,4 @@ void setup_callback(const void* request_msg, void* response_msg){
 				(racs_services__srv__Setup_Response*) response_msg;
 		ScorBot.rcvSetup(req_in);
 		ScorBot.sndSetup(res_in);
-		//res_in->response = 0b00000011;
 	}

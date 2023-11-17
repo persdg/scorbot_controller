@@ -448,7 +448,7 @@ void Robot::sndCtrl(racs_services__srv__Control_Response* response){
   //Communication::snd(snd_ctrl);
 }
 
-void Robot::(racs_services__srv__Setup_Request* request){
+void Robot::rcvSetup(racs_services__srv__Setup_Request* request){
   //Communication::rcv(rcv_setup);
 
   setEncoderDivider(request->motor_index, request->encoder_error_divider);
