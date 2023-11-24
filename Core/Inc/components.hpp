@@ -3,16 +3,15 @@
 
 //#define PIN_EXTRA_FEATURES
 
+#include <algorithm>
 #include <cstdint>
 #include <math.h>
 #include <utils.hpp>
 #include <control.hpp>
-#include <communication.hpp>
 #include "main.h"
 #include <racs_services/srv/control.h>
 #include <racs_services/srv/setup.h>
-#include "utils.hpp"
-#include "tim.h"
+#include <tim.h>
 
 class PinControl {
 public:
@@ -199,14 +198,10 @@ private:
   bool *switches;         // Motors' endstops switches values
   int16_t *motors_pwm;      // Motors' PWMs current values
 
-  long *encoders_snd;     // Cumulative encoders values sent
-  long *encoders_rcv;     // Cumulative encoders values received
+  //int32_t *encoders_snd;     // Cumulative encoders values sent
+  //int32_t *encoders_rcv;     // Cumulative encoders values received
+  int32_t *encoders;
   float *error_div;       // Encoders error dividers
-
-  Communication::SNDctrl *snd_ctrl;     // Control message data
-  Communication::RCVctrl *rcv_ctrl;     // Control response data
-  Communication::SNDsetup *snd_setup;   // Setup message data
-  Communication::RCVsetup *rcv_setup;   // Setup response data
 };
 
 Robot create_robot();

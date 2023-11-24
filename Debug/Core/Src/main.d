@@ -46,7 +46,6 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Core/Inc/dma.h ../Core/Inc/main.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/usb_otg.h ../Core/Inc/gpio.h \
  ../Core/Inc/components.hpp ../Core/Inc/utils.hpp ../Core/Inc/control.hpp \
- ../Core/Inc/communication.hpp ../Core/Inc/utils.hpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/control.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/control__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/primitives_sequence.h \
@@ -78,7 +77,7 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h \
- ../Core/Inc/tim.h ../Core/Inc/dma_transport.h \
+ ../Core/Inc/dma_transport.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/uxr/client/transport.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/uxr/client/config.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/uxr/client/profile/transport/custom/custom_transport.h \
@@ -290,8 +289,6 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../Core/Inc/components.hpp:
 ../Core/Inc/utils.hpp:
 ../Core/Inc/control.hpp:
-../Core/Inc/communication.hpp:
-../Core/Inc/utils.hpp:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/control.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/control__struct.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/primitives_sequence.h:
@@ -323,7 +320,6 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__struct.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h:
-../Core/Inc/tim.h:
 ../Core/Inc/dma_transport.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/uxr/client/transport.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/uxr/client/config.h:

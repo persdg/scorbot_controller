@@ -263,6 +263,11 @@ void Error_Handler(void);
 void control_callback(const void* request_msg, void* response_msg);
 void setup_callback(const void* request_msg, void* response_msg);
 
+#define HALF_ENC 32768
+#define HALF_PWM 32768
+#define MAX_ENC HALF_ENC*2
+#define MAX_PWM HALF_PWM*2
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

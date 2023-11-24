@@ -1,10 +1,5 @@
 uint8 num_motors
 uint8 command
-uint8 directions
-uint8[] values
+int32[] values
 ---
-uint8 num_motors
-uint8 status
-uint8 ends
-uint8 enc_directions
-uint8[] encoders
+uint8 response

@@ -1,5 +1,5 @@
 uint8 motor_index
-float32 encoder_error_divider
+float32 eed
 float32 p
 float32 i
 float32 d

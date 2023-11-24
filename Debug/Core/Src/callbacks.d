@@ -1,7 +1,6 @@
 Core/Src/callbacks.o: ../Core/Src/callbacks.cpp ../Core/Inc/callbacks.hpp \
  ../Core/Inc/components.hpp ../Core/Inc/utils.hpp ../Core/Inc/control.hpp \
- ../Core/Inc/communication.hpp ../Core/Inc/utils.hpp ../Core/Inc/main.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
+ ../Core/Inc/main.h ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h \
@@ -70,8 +69,6 @@ Core/Src/callbacks.o: ../Core/Src/callbacks.cpp ../Core/Inc/callbacks.hpp \
 ../Core/Inc/components.hpp:
 ../Core/Inc/utils.hpp:
 ../Core/Inc/control.hpp:
-../Core/Inc/communication.hpp:
-../Core/Inc/utils.hpp:
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:

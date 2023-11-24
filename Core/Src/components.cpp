@@ -237,8 +237,9 @@ Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_
   this->pids = 			(PID*)		malloc(size * sizeof(PID));
   this->switches = 		(bool*) 	malloc(size * sizeof(bool));
   this->motors_pwm = 	(int16_t*) 	malloc(size * sizeof(int16_t));
-  this->encoders_rcv = 	(long*)		malloc(size * sizeof(long));
-  this->encoders_snd = 	(long*) 	malloc(size * sizeof(long));
+  //this->encoders_rcv = 	(int32_t*)	malloc(size * sizeof(int32_t));
+  //this->encoders_snd = 	(int32_t*) 	malloc(size * sizeof(int32_t));
+  this->encoders =		(int32_t*)	malloc(size * sizeof(int32_t));
   this->error_div = 	(float*) 	malloc(size * sizeof(float));
 
   this->size = size;
@@ -247,15 +248,11 @@ Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_
   for(int i = 0; i < size; i++){
     this->switches[i] = false;
     this->motors_pwm[i] = 0;
-    this->encoders_snd[i] = 0;
-    this->encoders_rcv[i] = 0;
+    //this->encoders_snd[i] = 0;
+    //this->encoders_rcv[i] = 0;
+    this->encoders[i] = 0;
     this->error_div[i] = 0.0;
   }
-
-  this->snd_ctrl = new Communication::SNDctrl(size);
-  this->rcv_ctrl = new Communication::RCVctrl(size);
-  this->snd_setup = new Communication::SNDsetup();
-  this->rcv_setup = new Communication::RCVsetup();
 
   if(motors != NULL){
     for(int i = 0; i < size; i++){
@@ -282,13 +279,10 @@ Robot::~Robot() {
   free(this->pids);
   free(this->switches);
   free(this->motors_pwm);
-  free(this->encoders_rcv);
-  free(this->encoders_snd);
+  //free(this->encoders_rcv);
+  //free(this->encoders_snd);
+  free(this->encoders);
   free(this->error_div);
-  delete this->snd_ctrl;
-  delete this->rcv_ctrl;
-  delete this->snd_setup;
-  delete this->rcv_setup;
 }
 
 int Robot::getSize(){
@@ -397,10 +391,6 @@ void Robot::disableMotors(){
   pin_enable.set(false);
 }*/
 
-/*Communication::Next Robot::peek(){
-  return Communication::peek();
-}*/
-
 void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
 
   if(request->command > 2 || request->num_motors != size) {
@@ -412,19 +402,22 @@ void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
     case (unsigned char) Command::Idle:
       for(int i = 0; i < size; i++) {
         motors_pwm[i] = 0;
-        encoders_rcv[i] = 0;
+        //encoders_rcv[i] = 0;
+        //encoders[i] = 0;
       }
       break;
     case (unsigned char) Command::DAQ:
       for(int i = 0; i < size; i++) {
         motors_pwm[i] = request->values.data[i];
-        encoders_rcv[i] = 0;
+        //encoders_rcv[i] = 0;
+        encoders[i] = 0;
       }
       break;
     case (unsigned char) Command::PID:
       for(int i = 0; i < size; i++) {
         motors_pwm[i] = 0;
-        encoders_rcv[i] += request->values.data[i];
+        //encoders_rcv[i] += request->values.data[i];
+        encoders[i] = request->values.data[i];
       }
       break;
   }
@@ -433,25 +426,13 @@ void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
 }
 
 void Robot::sndCtrl(racs_services__srv__Control_Response* response){
-  response->num_motors = size;
-  response->status = (uint8_t) status;
-  response->ends = 0;
-  response->enc_directions = 0;
 
-  for(int i = 0; i < size; i++) {
-    response->ends |= switches[i] * (1 << i);
-    response->encoders.data[i] = std::min(abs(getMotor(i)->getEncoder() - encoders_snd[i]), 255L);
-    encoders_snd[i] += response->encoders.data[i];
-    response->enc_directions |= sgn(encoders_snd[i]) * (1 << i);
-  }
-
-  //Communication::snd(snd_ctrl);
+	response->response = (uint8_t) status;
 }
 
 void Robot::rcvSetup(racs_services__srv__Setup_Request* request){
-  //Communication::rcv(rcv_setup);
 
-  setEncoderDivider(request->motor_index, request->encoder_error_divider);
+  setEncoderDivider(request->motor_index, request->eed);
   getPID(request->motor_index)->reset();
   getPID(request->motor_index)->init((float) ts/1000.0, request->tau, request->sat, true);
   getPID(request->motor_index)->setup(request->p, request->i, request->d);
@@ -460,8 +441,7 @@ void Robot::rcvSetup(racs_services__srv__Setup_Request* request){
 }
 
 void Robot::sndSetup(racs_services__srv__Setup_Response* response){
-  response->response = (unsigned char) Status::Setup;
-  //Communication::snd(snd_setup);
+  response->response = (uint8_t) Status::Setup;
 }
 
 void Robot::update(){
@@ -475,10 +455,8 @@ void Robot::update(){
 
     case Status::PID:
       for(int i = 0; i < size; i++){
-    	//RIMUOVERE ERROR_DIV
-        //float err = (float) (getMotor(i)->getEncoder() - encoders_rcv[i]) / ((error_div[i] == 0) ? 1.0 : error_div[i]);
-    	float err = (float) (getMotor(i)->getEncoder() - encoders_rcv[i]);
-    	motors_pwm[i] = (short) std::min(std::max(getPID(i)->evolve(err), (float) -255.0), (float) 255.0);
+        float err = (float) (getMotor(i)->getEncoder() - encoders[i]) / ((error_div[i] == 0) ? 1.0 : error_div[i]);
+    	motors_pwm[i] = (int16_t) std::min(std::max((float) 0, getPID(i)->evolve(err)), (float) MAX_PWM) - HALF_PWM;
       }
       break;
 

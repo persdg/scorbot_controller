@@ -233,8 +233,7 @@ Core/Src/freertos.o: ../Core/Src/freertos.cpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/uxr/client/transport.h \
  ../Core/Inc/usart.h ../Core/Inc/main.h ../Core/Inc/dma_transport.h \
  ../Core/Inc/micro_ros_allocators.h ../Core/Inc/components.hpp \
- ../Core/Inc/utils.hpp ../Core/Inc/control.hpp \
- ../Core/Inc/communication.hpp ../Core/Inc/utils.hpp ../Core/Inc/tim.h \
+ ../Core/Inc/utils.hpp ../Core/Inc/control.hpp ../Core/Inc/tim.h \
  ../Core/Inc/callbacks.hpp
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -476,7 +475,5 @@ Core/Src/freertos.o: ../Core/Src/freertos.cpp \
 ../Core/Inc/components.hpp:
 ../Core/Inc/utils.hpp:
 ../Core/Inc/control.hpp:
-../Core/Inc/communication.hpp:
-../Core/Inc/utils.hpp:
 ../Core/Inc/tim.h:
 ../Core/Inc/callbacks.hpp:
