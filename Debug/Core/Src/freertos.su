@@ -1,2 +1,3 @@
-../Core/Src/freertos.cpp:88:6:void MX_FREERTOS_Init()	8	static
-../Core/Src/freertos.cpp:130:6:void StartDefaultTask(void*)	528	static
+../Core/Src/freertos.cpp:96:6:void MX_FREERTOS_Init()	8	static
+../Core/Src/freertos.cpp:141:6:void StartDefaultTask(void*)	528	static
+../Core/Src/freertos.cpp:226:6:void cycleRobotTask(void*)	16	static

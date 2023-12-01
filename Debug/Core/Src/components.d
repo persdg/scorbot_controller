@@ -64,7 +64,7 @@ Core/Src/components.o: ../Core/Src/components.cpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h \
- ../Core/Inc/tim.h
+ ../Core/Inc/tim.h ../Core/Inc/main.h
 ../Core/Inc/components.hpp:
 ../Core/Inc/utils.hpp:
 ../Core/Inc/control.hpp:
@@ -134,3 +134,4 @@ Core/Src/components.o: ../Core/Src/components.cpp \
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h:
 ../Core/Inc/tim.h:
+../Core/Inc/main.h:

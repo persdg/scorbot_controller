@@ -72,9 +72,7 @@ void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
-/*#ifdef __cplusplus
-}
-#endif*/
+
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 

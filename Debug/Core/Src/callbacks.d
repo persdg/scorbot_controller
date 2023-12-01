@@ -64,7 +64,7 @@ Core/Src/callbacks.o: ../Core/Src/callbacks.cpp ../Core/Inc/callbacks.hpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h \
- ../Core/Inc/tim.h
+ ../Core/Inc/tim.h ../Core/Inc/main.h
 ../Core/Inc/callbacks.hpp:
 ../Core/Inc/components.hpp:
 ../Core/Inc/utils.hpp:
@@ -135,3 +135,4 @@ Core/Src/callbacks.o: ../Core/Src/callbacks.cpp ../Core/Inc/callbacks.hpp \
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h:
 ../Core/Inc/tim.h:
+../Core/Inc/main.h:

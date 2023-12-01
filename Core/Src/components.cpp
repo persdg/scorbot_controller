@@ -1,9 +1,3 @@
-/*
- * COSE DA FARE:
- * Tutta la roba commentata de sotto
- * l'attributo error_div deve essere rimosso
- */
-
 #include <components.hpp>
 
 //#include <algorithm>
@@ -20,7 +14,6 @@ PinControl::PinControl() {
 PinControl::PinControl(GPIO_TypeDef* port, uint16_t pin){
   this->port = port;
   this->pin = pin;
-  //tolta la linea per impostare il pin ad output perché STM32 lo fa da sé, se settato correttamente
   setLimits(0.0, 0.0);
 }
 
@@ -237,19 +230,16 @@ Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_
   this->pids = 			(PID*)		malloc(size * sizeof(PID));
   this->switches = 		(bool*) 	malloc(size * sizeof(bool));
   this->motors_pwm = 	(int16_t*) 	malloc(size * sizeof(int16_t));
-  //this->encoders_rcv = 	(int32_t*)	malloc(size * sizeof(int32_t));
-  //this->encoders_snd = 	(int32_t*) 	malloc(size * sizeof(int32_t));
   this->encoders =		(int32_t*)	malloc(size * sizeof(int32_t));
   this->error_div = 	(float*) 	malloc(size * sizeof(float));
 
   this->size = size;
   this->status = Status::Idle;
+  this->lastEvent = getCurrentTime();
 
   for(int i = 0; i < size; i++){
     this->switches[i] = false;
     this->motors_pwm[i] = 0;
-    //this->encoders_snd[i] = 0;
-    //this->encoders_rcv[i] = 0;
     this->encoders[i] = 0;
     this->error_div[i] = 0.0;
   }
@@ -264,7 +254,7 @@ Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_
     }
   }
 
-  timer.setup(ts_ms);
+  lastEvent = getCurrentTime();
   update();
 }
 
@@ -279,8 +269,6 @@ Robot::~Robot() {
   free(this->pids);
   free(this->switches);
   free(this->motors_pwm);
-  //free(this->encoders_rcv);
-  //free(this->encoders_snd);
   free(this->encoders);
   free(this->error_div);
 }
@@ -380,8 +368,8 @@ void Robot::resetPWMs(){
   }
 }
 
-/* DA RIFARE
- * void Robot::enableMotors(){
+
+void Robot::enableMotors(){
   setStatus(Status::Idle, true);
   pin_enable.set(true);
 }
@@ -389,7 +377,7 @@ void Robot::resetPWMs(){
 void Robot::disableMotors(){
   setStatus(Status::Idle, true);
   pin_enable.set(false);
-}*/
+}
 
 void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
 
@@ -402,22 +390,19 @@ void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
     case (unsigned char) Command::Idle:
       for(int i = 0; i < size; i++) {
         motors_pwm[i] = 0;
-        //encoders_rcv[i] = 0;
-        //encoders[i] = 0;
+        encoders[i] = 0;
       }
       break;
     case (unsigned char) Command::DAQ:
       for(int i = 0; i < size; i++) {
-        motors_pwm[i] = request->values.data[i];
-        //encoders_rcv[i] = 0;
+        motors_pwm[i] = request->encoders.data[i];
         encoders[i] = 0;
       }
       break;
     case (unsigned char) Command::PID:
       for(int i = 0; i < size; i++) {
         motors_pwm[i] = 0;
-        //encoders_rcv[i] += request->values.data[i];
-        encoders[i] = request->values.data[i];
+        encoders[i] = request->encoders.data[i];
       }
       break;
   }
@@ -426,7 +411,6 @@ void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
 }
 
 void Robot::sndCtrl(racs_services__srv__Control_Response* response){
-
 	response->response = (uint8_t) status;
 }
 
@@ -479,7 +463,7 @@ void Robot::actuate(){
 }
 
 /*void Robot::cycle(unsigned long time_ms){
-  updateEncoders();
+  //updateEncoders();
   //Communication::Next next = peek(); da cancellare?
 
   if(next == Communication::Next::Setup){
@@ -493,7 +477,7 @@ void Robot::actuate(){
   } else {
     if(getStatus() == Robot::Status::Idle && next == Communication::Next::Ctrl){
       pin_toggle.set(true);
-      //rcvCtrl(); buggone?
+      //rcvCtrl();
       update();
       actuate();
       pin_toggle.set(false);
@@ -517,13 +501,23 @@ void Robot::actuate(){
   }
 }*/
 
+void Robot::cycle(unsigned long time_ms){
+      if (getElapsedTime(lastEvent) >= time_ms){
+    	lastEvent = getCurrentTime();
+        pin_toggle.set(true);
+        update();
+        actuate();
+        pin_toggle.set(false);
+      }
+}
+
 Robot create_robot() {
 
 	PinControl mot1_ina = PinControl(MOTOR1_INA_GPIO_Port, MOTOR1_INA_Pin);
 	PinControl mot1_inb = PinControl(MOTOR1_INB_GPIO_Port, MOTOR1_INB_Pin);
 	PinMeasure mot1_end = PinMeasure(MOTOR1_END_GPIO_Port, MOTOR1_END_Pin);
 
-	PinControl mot2_ina = PinControl(MOTOR2_INA_GPIO_Port, MOTOR2_INA_Pin);
+	/*PinControl mot2_ina = PinControl(MOTOR2_INA_GPIO_Port, MOTOR2_INA_Pin);
 	PinControl mot2_inb = PinControl(MOTOR2_INB_GPIO_Port, MOTOR2_INB_Pin);
 	PinMeasure mot2_end = PinMeasure(MOTOR2_END_GPIO_Port, MOTOR2_END_Pin);
 
@@ -541,25 +535,27 @@ Robot create_robot() {
 
 	PinControl mot6_ina = PinControl(MOTOR6_INA_GPIO_Port, MOTOR6_INA_Pin);
 	PinControl mot6_inb = PinControl(MOTOR6_INB_GPIO_Port, MOTOR6_INB_Pin);
-	PinMeasure mot6_end = PinMeasure(MOTOR6_END_GPIO_Port, MOTOR6_END_Pin);
+	PinMeasure mot6_end = PinMeasure(MOTOR6_END_GPIO_Port, MOTOR6_END_Pin);*/
 
 	PinControl enable = PinControl(MOTORS_EN_GPIO_Port, MOTORS_EN_Pin);
 	PinControl toggle = PinControl(PIN_TOGGLE_GPIO_Port, PIN_TOGGLE_Pin);
 
 	Motor motor1 = Motor(mot1_ina, mot1_inb, &htim1, 1, &htim2, mot1_end);
-	Motor motor2 = Motor(mot2_ina, mot2_inb, &htim1, 2, &htim3, mot2_end);
+	/*Motor motor2 = Motor(mot2_ina, mot2_inb, &htim1, 2, &htim3, mot2_end);
 	Motor motor3 = Motor(mot3_ina, mot3_inb, &htim1, 3, &htim4, mot3_end);
 	Motor motor4 = Motor(mot4_ina, mot4_inb, &htim1, 4, &htim5, mot4_end);
 	Motor motor5 = Motor(mot5_ina, mot5_inb, &htim9, 1, &htim8, mot5_end);
-	Motor motor6 = Motor(mot6_ina, mot6_inb, &htim9, 2, 		mot6_end);
+	Motor motor6 = Motor(mot6_ina, mot6_inb, &htim9, 2, 		mot6_end);*/
 
-	Motor** motors = (Motor**) malloc(sizeof(Motor*)*6);
-	float* encs_div = (float*) malloc(sizeof(float)*6);
+	//Motor** motors = (Motor**) malloc(sizeof(Motor*)*6);
+	Motor** motors = (Motor**) malloc(sizeof(Motor*)*1);
+	//float* encs_div = (float*) malloc(sizeof(float)*6);
+	float* encs_div = (float*) malloc(sizeof(float)*1);
 
-	motors[0] = &motor1; motors[1] = &motor2; motors[2] = &motor3; motors[3] = &motor4; motors[4] = &motor5; motors[5] = &motor6;
-	encs_div[0] = 1; encs_div[1] = 1; encs_div[2] = 1; encs_div[3] = 1; encs_div[4] = 1; encs_div[5] = 1;
-
-	Robot myRobot = Robot(enable, toggle, 10, 6, motors, encs_div);
+	motors[0] = &motor1; /*motors[1] = &motor2; motors[2] = &motor3; motors[3] = &motor4; motors[4] = &motor5; motors[5] = &motor6;
+	encs_div[0] = 1; encs_div[1] = 1; encs_div[2] = 1; encs_div[3] = 1; encs_div[4] = 1; encs_div[5] = 1;*/
+	//Robot myRobot = Robot(enable, toggle, TS, 6, motors, encs_div);
+	Robot myRobot = Robot(enable, toggle, TS, 1, motors, encs_div);
 
 	return myRobot;
 }

@@ -167,7 +167,7 @@ void Error_Handler(void);
 // ============================================================
 
 // DC Motors PINs
-#define MOTORS_EN      		// Motors enabler
+/*#define MOTORS_EN      		// Motors enabler
 
 #define PORT_MOTOR_1_INA GPIOE      // Motor 1 spin direction
 #define MOTOR_1_INB 23      // Motor 1 spin direction
@@ -209,15 +209,15 @@ void Error_Handler(void);
 #define MOTOR_6_PWM 8       // Motor 6 spin pwm
 #define MOTOR_6_CHA A13     // Motor 6 encoder A channel
 #define MOTOR_6_CHB 13      // Motor 6 encoder B channel
-#define MOTOR_6_END 32      // Motor 6 endstop switch
+#define MOTOR_6_END 32      // Motor 6 endstop switch*/
 
 // Other pins
-#define PIN_TOGGLE  52
+// #define PIN_TOGGLE  52
 
 // Control parameters
 #define TS          10      // Control time sampling
 
-#define ENC_1_DIV   1000.0  // Motor 1 divider for encoder error in PID mode
+/*#define ENC_1_DIV   1000.0  // Motor 1 divider for encoder error in PID mode
 #define ENC_2_DIV   1000.0  // Motor 2 divider for encoder error in PID mode
 #define ENC_3_DIV   1000.0  // Motor 3 divider for encoder error in PID mode
 #define ENC_4_DIV   1000.0  // Motor 4 divider for encoder error in PID mode
@@ -258,7 +258,7 @@ void Error_Handler(void);
 #define PID_6_KI    0.1     // Motor 6 PID integral coefficient
 #define PID_6_KD    0.0     // Motor 6 PID derivative coefficient
 #define PID_6_POLE  10.0    // Motor 6 PID dirty derivative pole
-#define PID_6_SAT   100.0   // Motor 6 PID integral saturation
+#define PID_6_SAT   100.0   // Motor 6 PID integral saturation*/
 
 void control_callback(const void* request_msg, void* response_msg);
 void setup_callback(const void* request_msg, void* response_msg);

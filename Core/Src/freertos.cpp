@@ -70,6 +70,13 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 3000 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for cycleRobot */
+osThreadId_t cycleRobotHandle;
+const osThreadAttr_t cycleRobot_attributes = {
+  .name = "cycleRobot",
+  .stack_size = 256 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -77,6 +84,7 @@ const osThreadAttr_t defaultTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
+void cycleRobotTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -109,6 +117,9 @@ void MX_FREERTOS_Init(void) {
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of cycleRobot */
+  cycleRobotHandle = osThreadNew(cycleRobotTask, NULL, &cycleRobot_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -205,7 +216,26 @@ void StartDefaultTask(void *argument)
   /* USER CODE END StartDefaultTask */
 }
 
+/* USER CODE BEGIN Header_cycleRobotTask */
+/**
+* @brief Function implementing the cycleRobot thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_cycleRobotTask */
+void cycleRobotTask(void *argument)
+{
+  /* USER CODE BEGIN cycleRobotTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END cycleRobotTask */
+}
+
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
 
 /* USER CODE END Application */
+

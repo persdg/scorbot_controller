@@ -1,5 +1,5 @@
 uint8 num_motors
 uint8 command
-int32[] values
+int32[] encoders
 ---
 uint8 response

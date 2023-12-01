@@ -8,7 +8,7 @@
 #include <math.h>
 #include <utils.hpp>
 #include <control.hpp>
-#include "main.h"
+#include <main.h>
 #include <racs_services/srv/control.h>
 #include <racs_services/srv/setup.h>
 #include <tim.h>
@@ -92,11 +92,7 @@ public:
     BRAKE_VCC
   };
 
-  //void invertEncoder(bool invert);  // Invert encoder ticks counting direction
   long getEncoder();                // Return encoder ticks
-  //void setEncoder(long value);      // Set/reset encoder ticks
-  //void readEncoder();               // Read encoder pins
-  //void updateEncoder();             // Update encoder ticks
 
   void invertMotor(bool invert);    // Invert physical spin direction of the motor
   void driveMotor(short spwm);      // Assign pwm with sign for spin direction
@@ -110,15 +106,8 @@ private:
   uint8_t CCRx;					// Indice del Timer relativo al motore
   TIM_HandleTypeDef* htimENC;	// Handle del Timer relativo all'encoder
   PinMeasure &pin_END;          // endstop switch
-
-  /*
-  bool enc_A = false;           // Encoder channel A state
-  bool enc_B = false;           // Encoder channel B state
-
-  bool encoder_invert = false;  // If invert encoder counting direction
-  long encoder = 0;             // Encoder ticks count
-  */
   bool motor_invert = false;    // If invert motor physical spin direction
+  uint32_t lastEvent;
 };
 
 
@@ -160,10 +149,10 @@ public:
   void setupPIDs(float kp, float ki, float kd);                   // Initialize all PIDs with following coefficients
   void resetPIDs();                                               // Reset all PIDs state
 
-  void updateEncoders();                        // Update all motors' encoders
-  void setEncoders(long *values);               // Set encoders' values
-  void setEncoder(uint8_t index, long value);   // Set encoder value for motor specified by index
-  void resetEncoders();                         // Reset all motors' encoders
+  //void updateEncoders();                        // Update all motors' encoders
+  //void setEncoders(long *values);               // Set encoders' values
+  //void setEncoder(uint8_t index, long value);   // Set encoder value for motor specified by index
+  //void resetEncoders();                         // Reset all motors' encoders
 
   void setPWMs(short *pwms);                    // Set motors' PWMs values
   void setPWM(uint8_t index, int16_t pwm);     // Set PWM value for motor specified by index
@@ -172,7 +161,6 @@ public:
   void enableMotors();                          // Enable all motors
   void disableMotors();                         // Disable all motors
 
-//  Communication::Next peek();         						// Check next message type
   void rcvCtrl(racs_services__srv__Control_Request* request);     // Receive and process a control message from serial communication
   void sndCtrl(racs_services__srv__Control_Response* response);	// Make and send a control response to serial communication
   void rcvSetup(racs_services__srv__Setup_Request* request);                    							// Receive and process a setup message from serial communication
@@ -182,7 +170,7 @@ public:
   void actuate();                     // Apply computed PWMs
   void cycle(unsigned long time_ms);  // Looping function
 
-
+  uint32_t lastEvent;
 private:
   PinControl &pin_enable; // Pin for motors enabling/disabling
   PinControl &pin_toggle; // Pin for motors enabling/disabling
@@ -193,13 +181,10 @@ private:
   PID *pids;              // Pointer to motors' PIDs
 
   Status status;          // Robot status
-  Timer timer;            // Robot cycle timer
 
   bool *switches;         // Motors' endstops switches values
   int16_t *motors_pwm;      // Motors' PWMs current values
 
-  //int32_t *encoders_snd;     // Cumulative encoders values sent
-  //int32_t *encoders_rcv;     // Cumulative encoders values received
   int32_t *encoders;
   float *error_div;       // Encoders error dividers
 };

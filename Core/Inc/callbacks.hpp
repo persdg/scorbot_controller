@@ -4,6 +4,7 @@
 #include <components.hpp>
 #include <racs_services/srv/control.h>
 #include <racs_services/srv/setup.h>
+#include <utils.hpp>
 
 extern Robot ScorBot;
 
