@@ -1,2 +1,2 @@
 uint8 num_motors
-int32[] pwms
+int16[6] pwms

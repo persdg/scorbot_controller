@@ -27,6 +27,8 @@
 /* USER CODE BEGIN Includes */
 #include <racs_services/srv/control.h>
 #include <racs_services/srv/setup.h>
+#include <racs_services/msg/feedback.h>
+#include <racs_services/msg/direct_access.h>
 #include <rcl/error_handling.h>
 #include <rcl/rcl.h>
 #include <rclc/executor.h>
@@ -62,6 +64,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 extern Robot ScorBot;
+rcl_publisher_t feedback_publisher;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -159,15 +162,29 @@ void StartDefaultTask(void *argument)
 
 	rcl_ret_t rc;
 	rcl_node_t node; // nodo;
+	rcl_timer_t timer;
+	const unsigned int timer_period = RCL_MS_TO_NS(1000);
+	//rcl_publisher_t feedback_publisher; // publisher
+	rcl_subscription_t subscriber;
 	rcl_service_t setup_service, control_service; //servizi
-	const char* setup_service_name = "/setup";
-	const char* control_service_name = "/control"; //nomi dei servizi
+
+	const char* feedback_publisher_name = "/feedback";	//publisher
+	const char* pwm_subscriber_name = "/pwm"			//subscriber
+	const char* setup_service_name = "/setup";			//servizi
+	const char* control_service_name = "/control";
+
+	const rosidl_message_type_support_t* feedback_type_support =
+		ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, Feedback);
+	const rosidl_message_type_support_t * pwm_type_support =
+	  ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, DirectAccess);
 	const rosidl_service_type_support_t* setup_type_support =
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Setup);
 	const rosidl_service_type_support_t* control_type_support =
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Control);
 	rclc_support_t support;// support_p;
 	rcl_allocator_t allocator;// allocator_p;
+
+	racs_services__msg__DirectAccess pwm_msg;
 
 	racs_services__srv__Setup_Request req_setup;
 	racs_services__srv__Setup_Response res_setup;
@@ -179,23 +196,40 @@ void StartDefaultTask(void *argument)
 	rc = rclc_support_init(&support, 0, NULL, &allocator);
 	if (rc != RCL_RET_OK) return;
 
+	rc = rclc_timer_init_default(&timer, &support, timer_period, timer_callback);
+	if (rc != RCL_RET_OK) return;
+
 	rc = rclc_node_init_default(&node, "STM32_node", "", &support);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_publisher_init_best_effort(
+	  &feedback_publisher, &node, feedback_type_support, feedback_publisher_name);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_subscription_init_best_effort(
+	  &subscriber, &node, pwm_type_support, pwm_subscriber_name);
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_service_init_default(
 		&setup_service, &node, setup_type_support, setup_service_name);
-
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_service_init_default(
 		&control_service, &node, control_type_support, control_service_name);
-
 	if (rc != RCL_RET_OK) return;
 
 	rclc_executor_t executor;
 	executor = rclc_executor_get_zero_initialized_executor();
-	unsigned int num_handles = 2;
+	unsigned int num_handles = 3; //2 servizi e 1 timer
 	rclc_executor_init(&executor, &support.context, num_handles, &allocator);
+
+	rc = rclc_executor_add_timer(&executor, &timer);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_executor_add_subscription(
+	  &executor, &subscriber, &pwm_msg,
+	  &pwm_callback, ON_NEW_DATA);
+	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_executor_add_service(
 		&executor, &setup_service, &req_setup,

@@ -60,7 +60,9 @@ extern DMA_HandleTypeDef hdma_usart3_rx;
 extern UART_HandleTypeDef huart3;
 extern TIM_HandleTypeDef htim6;
 
-/* USER CODE BEGIN EV */
+/* USER CODE BEGIN EV #4  0x0800b754 in _Control_Request__cdr_deserialize ()
+[Switching to thread 1 (Thread 1)]
+#3  0x0800d64c in ucdr_deserialize_endian_array_int32_t ()*/
 
 /* USER CODE END EV */
 

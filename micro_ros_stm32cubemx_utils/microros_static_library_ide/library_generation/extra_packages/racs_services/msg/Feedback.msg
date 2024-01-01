@@ -1,2 +1,2 @@
 uint8 num_motors
-int32[] encoders
+int16[6] encoders

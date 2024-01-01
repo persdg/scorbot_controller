@@ -122,7 +122,7 @@ public:
   // Robot possible commands
   enum class Command : uint8_t {
     Idle = 0,
-    DAQ = 1,
+    //DAQ = 1,
     PID = 2,
     Setup = 3
   };
@@ -130,7 +130,7 @@ public:
   // Robot possible statuses
   enum class Status : uint8_t {
     Idle = 0,
-    DAQ = 1,
+    //DAQ = 1,
     PID = 2,
     Setup = 3
   };
@@ -153,6 +153,8 @@ public:
   //void setEncoders(long *values);               // Set encoders' values
   //void setEncoder(uint8_t index, long value);   // Set encoder value for motor specified by index
   //void resetEncoders();                         // Reset all motors' encoders
+
+  int16_t getEncoder(uint8_t index);
 
   void setPWMs(short *pwms);                    // Set motors' PWMs values
   void setPWM(uint8_t index, int16_t pwm);     // Set PWM value for motor specified by index
@@ -185,7 +187,7 @@ private:
   bool *switches;         // Motors' endstops switches values
   int16_t *motors_pwm;      // Motors' PWMs current values
 
-  int32_t *encoders;
+  int16_t *encoders;
   float *error_div;       // Encoders error dividers
 };
 
