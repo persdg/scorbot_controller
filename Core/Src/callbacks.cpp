@@ -3,6 +3,14 @@
 void pwm_callback(const void* msgin) {
 	const racs_services__msg__DirectAccess* pwm_msg =
 		(const racs_services__msg__DirectAccess*) msgin;
+
+	if(pwm_msg->num_motors != ScorBot.getSize()) {
+	    ScorBot.setStatus(Robot::Status::Idle, true);
+	    return;
+	}
+
+	ScorBot.setPWMs(pwm_msg->pwms);
+	ScorBot.setStatus(Robot::Status::DAQ, false);
 }
 
 void control_callback(const void* request_msg, void* response_msg){
@@ -25,9 +33,9 @@ void setup_callback(const void* request_msg, void* response_msg){
 		ScorBot.sndSetup(res_in);
 	}
 
-void timer_callback(rcl_timer_t* timer, int64_t last_call_time)
+void feedback_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 {
-	UNUSED(timer);
+	//UNUSED(timer);
 	UNUSED(last_call_time);
 
 	if (timer != NULL) {
@@ -46,4 +54,15 @@ void timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 		rc = rcl_publish(&feedback_publisher, &feedback, NULL);
 		if (rc != RCL_RET_OK) return;
 	}
+}
+
+void robot_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
+{
+	//UNUSED(timer);
+	UNUSED(last_call_time);
+	if (timer != NULL) {
+		ScorBot.cycle(0);	//0 è un numero qualunque, probabilmente cycle verrà
+							//cambiata e non accetterà più input
+	}
+
 }

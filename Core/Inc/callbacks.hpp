@@ -20,7 +20,8 @@ extern "C" {
 void pwm_callback(const void* msgin);
 void control_callback(const void* request_msg, void* response_msg);
 void setup_callback(const void* request_msg, void* response_msg);
-void timer_callback(rcl_timer_t* timer, int64_t last_call_time);
+void feedback_timer_callback(rcl_timer_t* timer, int64_t last_call_time);
+void robot_timer_callback(rcl_timer_t* timer, int64_t last_call_time);
 
 #ifdef __cplusplus
 }

@@ -162,14 +162,15 @@ void StartDefaultTask(void *argument)
 
 	rcl_ret_t rc;
 	rcl_node_t node; // nodo;
-	rcl_timer_t timer;
-	const unsigned int timer_period = RCL_MS_TO_NS(1000);
+	rcl_timer_t feedback_timer, robot_timer;
+	const unsigned int feedback_timer_period = RCL_MS_TO_NS(1000);
+	const unsigned int robot_timer_period = RCL_MS_TO_NS(10);
 	//rcl_publisher_t feedback_publisher; // publisher
 	rcl_subscription_t subscriber;
 	rcl_service_t setup_service, control_service; //servizi
 
 	const char* feedback_publisher_name = "/feedback";	//publisher
-	const char* pwm_subscriber_name = "/pwm"			//subscriber
+	const char* pwm_subscriber_name = "/pwm";			//subscriber
 	const char* setup_service_name = "/setup";			//servizi
 	const char* control_service_name = "/control";
 
@@ -181,6 +182,7 @@ void StartDefaultTask(void *argument)
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Setup);
 	const rosidl_service_type_support_t* control_type_support =
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Control);
+
 	rclc_support_t support;// support_p;
 	rcl_allocator_t allocator;// allocator_p;
 
@@ -196,7 +198,10 @@ void StartDefaultTask(void *argument)
 	rc = rclc_support_init(&support, 0, NULL, &allocator);
 	if (rc != RCL_RET_OK) return;
 
-	rc = rclc_timer_init_default(&timer, &support, timer_period, timer_callback);
+	rc = rclc_timer_init_default(&feedback_timer, &support, feedback_timer_period, feedback_timer_callback);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_timer_init_default(&robot_timer, &support, robot_timer_period, robot_timer_callback);
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_node_init_default(&node, "STM32_node", "", &support);
@@ -220,10 +225,13 @@ void StartDefaultTask(void *argument)
 
 	rclc_executor_t executor;
 	executor = rclc_executor_get_zero_initialized_executor();
-	unsigned int num_handles = 3; //2 servizi e 1 timer
+	unsigned int num_handles = 5; //2 servizi, 2 timer e 1 sub
 	rclc_executor_init(&executor, &support.context, num_handles, &allocator);
 
-	rc = rclc_executor_add_timer(&executor, &timer);
+	rc = rclc_executor_add_timer(&executor, &feedback_timer);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_executor_add_timer(&executor, &robot_timer);
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_executor_add_subscription(

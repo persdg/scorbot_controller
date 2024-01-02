@@ -69,6 +69,10 @@ Core/Src/callbacks.o: ../Core/Src/callbacks.cpp ../Core/Inc/callbacks.hpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/feedback__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/feedback__functions.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/feedback__type_support.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/direct_access.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/direct_access__struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/direct_access__functions.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/direct_access__type_support.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcl/rcl.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcl/init.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcl/allocator.h \
@@ -232,6 +236,10 @@ Core/Src/callbacks.o: ../Core/Src/callbacks.cpp ../Core/Inc/callbacks.hpp \
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/feedback__struct.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/feedback__functions.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/feedback__type_support.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/direct_access.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/direct_access__struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/direct_access__functions.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/direct_access__type_support.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcl/rcl.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcl/init.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcl/allocator.h:

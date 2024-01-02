@@ -1,5 +1,5 @@
-#ifndef COMPONENTS_H
-#define COMPONENTS_H
+#ifndef COMPONENTS_HPP
+#define COMPONENTS_HPP
 
 //#define PIN_EXTRA_FEATURES
 
@@ -122,7 +122,7 @@ public:
   // Robot possible commands
   enum class Command : uint8_t {
     Idle = 0,
-    //DAQ = 1,
+    DAQ = 1,
     PID = 2,
     Setup = 3
   };
@@ -130,7 +130,7 @@ public:
   // Robot possible statuses
   enum class Status : uint8_t {
     Idle = 0,
-    //DAQ = 1,
+    DAQ = 1,
     PID = 2,
     Setup = 3
   };
@@ -156,8 +156,8 @@ public:
 
   int16_t getEncoder(uint8_t index);
 
-  void setPWMs(short *pwms);                    // Set motors' PWMs values
-  void setPWM(uint8_t index, int16_t pwm);     // Set PWM value for motor specified by index
+  void setPWMs(const int16_t *pwms);                    // Set motors' PWMs values
+  void setPWM(uint8_t index, const int16_t pwm);     // Set PWM value for motor specified by index
   void resetPWMs();                             // Reset all motors' PWMs values to zero
 
   void enableMotors();                          // Enable all motors
@@ -193,4 +193,4 @@ private:
 
 Robot create_robot();
 
-#endif  // COMPONENTS_H
+#endif  // COMPONENTS_HPP

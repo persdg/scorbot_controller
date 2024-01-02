@@ -283,7 +283,7 @@ Robot::Status Robot::getStatus(){
 
 void Robot::setStatus(Status status, bool reset = false){
   if(this->status != status || reset){
-    resetPWMs();
+    //resetPWMs(); riga non necessaria?
     resetPIDs();
     this->status = status;
   }
@@ -354,13 +354,13 @@ int16_t Robot::getEncoder(uint8_t index) {
 	return this->encoders[index];
 }
 
-void Robot::setPWMs(int16_t *pwms){
+void Robot::setPWMs(const int16_t *pwms){
   for(int i = 0; i < size; i++){
     setPWM(i, pwms[i]);
   }
 }
 
-void Robot::setPWM(uint8_t index, int16_t pwm){
+void Robot::setPWM(uint8_t index, const int16_t pwm){
   motors_pwm[index] = pwm;
 
 }
@@ -437,8 +437,8 @@ void Robot::update(){
       resetPWMs();
       break;
 
-    /*case Status::DAQ:
-      break;*/
+    case Status::DAQ:
+      break;
 
     case Status::PID:
       for(int i = 0; i < size; i++){
@@ -505,13 +505,13 @@ void Robot::actuate(){
 }*/
 
 void Robot::cycle(unsigned long time_ms){
-      if (getElapsedTime(lastEvent) >= time_ms){
-    	lastEvent = getCurrentTime();
+      //if (getElapsedTime(lastEvent) >= time_ms){
+    	//lastEvent = getCurrentTime();
         pin_toggle.set(true);
         update();
         actuate();
         pin_toggle.set(false);
-      }
+      //}
 }
 
 Robot create_robot() {

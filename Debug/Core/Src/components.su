@@ -31,7 +31,7 @@
 ../Core/Src/components.cpp:319:6:void Robot::setupPIDs(float, float, float)	32	static
 ../Core/Src/components.cpp:325:6:void Robot::resetPIDs()	24	static
 ../Core/Src/components.cpp:353:9:int16_t Robot::getEncoder(uint8_t)	16	static
-../Core/Src/components.cpp:357:6:void Robot::setPWMs(int16_t*)	24	static
+../Core/Src/components.cpp:357:6:void Robot::setPWMs(const int16_t*)	24	static
 ../Core/Src/components.cpp:363:6:void Robot::setPWM(uint8_t, int16_t)	16	static
 ../Core/Src/components.cpp:368:6:void Robot::resetPWMs()	24	static
 ../Core/Src/components.cpp:375:6:void Robot::enableMotors()	16	static
