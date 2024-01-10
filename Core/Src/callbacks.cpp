@@ -61,8 +61,7 @@ void robot_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 	//UNUSED(timer);
 	UNUSED(last_call_time);
 	if (timer != NULL) {
-		ScorBot.cycle(0);	//0 è un numero qualunque, probabilmente cycle verrà
-							//cambiata e non accetterà più input
+		ScorBot.cycle();
 	}
 
 }

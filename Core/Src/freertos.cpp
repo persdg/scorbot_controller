@@ -160,6 +160,8 @@ void StartDefaultTask(void *argument)
 
 	if (!rcutils_set_default_allocator(&freeRTOS_allocator)) return;
 
+	//Robot ScorBot = create_robot();
+
 	rcl_ret_t rc;
 	rcl_node_t node; // nodo;
 	rcl_timer_t feedback_timer, robot_timer;
@@ -248,6 +250,8 @@ void StartDefaultTask(void *argument)
 		&executor, &control_service, &req_control,
 		&res_control, control_callback);
 	if (rc != RCL_RET_OK) return;
+
+	Robot ScorBot = create_robot();
 
 	rclc_executor_spin(&executor);
   /* Infinite loop */

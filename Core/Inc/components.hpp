@@ -34,7 +34,7 @@ public:
 
 private:
   GPIO_TypeDef* port;
-  uint8_t pin;
+  uint16_t pin;
   float v1;
   float v2;
   #if defined(PIN_EXTRA_FEATURES)
@@ -76,12 +76,18 @@ private:
 // DC Motor with Encoder
 class Motor{
 public:
-  Motor(PinControl &INA, PinControl &INB,
+  /*Motor(PinControl &INA, PinControl &INB,
 		TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
 		PinMeasure &END);
   Motor(PinControl &INA, PinControl &INB,
   		TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
-		TIM_HandleTypeDef* htimENC, PinMeasure &END);
+		TIM_HandleTypeDef* htimENC, PinMeasure &END);*/
+  Motor(PinControl INA, PinControl INB,
+		TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
+		PinMeasure END);
+  Motor(PinControl INA, PinControl INB,
+	  	TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
+		TIM_HandleTypeDef* htimENC, PinMeasure END);
   ~Motor();
 
   // Motor operating modes
@@ -92,7 +98,7 @@ public:
     BRAKE_VCC
   };
 
-  long getEncoder();                // Return encoder ticks
+  int16_t getEncoder();                // Return encoder ticks
 
   void invertMotor(bool invert);    // Invert physical spin direction of the motor
   void driveMotor(short spwm);      // Assign pwm with sign for spin direction
@@ -100,12 +106,15 @@ public:
   bool isInEndStop();               // Check if motor is at endstop
 
 private:
-  PinControl &pin_INA;          // A pin
-  PinControl &pin_INB;          // B pin
+  //PinControl &pin_INA;          // A pin
+  PinControl pin_INA;
+  //PinControl &pin_INB;          // B pin
+  PinControl pin_INB;
   TIM_HandleTypeDef* htimPWM;	// Handle del Timer relativo al motore
   uint8_t CCRx;					// Indice del Timer relativo al motore
   TIM_HandleTypeDef* htimENC;	// Handle del Timer relativo all'encoder
-  PinMeasure &pin_END;          // endstop switch
+  //PinMeasure &pin_END;          // endstop switch
+  PinMeasure pin_END;
   bool motor_invert = false;    // If invert motor physical spin direction
   uint32_t lastEvent;
 };
@@ -114,9 +123,12 @@ private:
 // 1-8 DoF Robot with DC Motors
 class Robot {
 public:
-  Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div);
+  /*Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div);
   Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors);
-  Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size);
+  Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size);*/
+  Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div);
+  Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size, Motor **motors);
+  Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size);
   ~Robot();
 
   // Robot possible commands
@@ -170,12 +182,15 @@ public:
 
   void update();                      // Update robot internal state according to status and received data
   void actuate();                     // Apply computed PWMs
-  void cycle(unsigned long time_ms);  // Looping function
+  void cycle();  // Looping function
 
   uint32_t lastEvent;
 private:
-  PinControl &pin_enable; // Pin for motors enabling/disabling
-  PinControl &pin_toggle; // Pin for motors enabling/disabling
+  /*PinControl &pin_enable; // Pin for motors enabling/disabling
+  PinControl &pin_toggle; // Pin for motors enabling/disabling*/
+  PinControl pin_enable; // Pin for motors enabling/disabling
+  PinControl pin_toggle; // Pin for motors enabling/disabling
+
 
   unsigned long ts;       // Time sampling in milliseconds
   unsigned char size;     // Number of motors

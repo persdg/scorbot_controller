@@ -138,7 +138,7 @@ Filter* PinMeasure::getFilter(){
 // Motor
 // ==================================================
 
-Motor::Motor(PinControl &INA, PinControl &INB,
+/*Motor::Motor(PinControl &INA, PinControl &INB,
 			 TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
 			 PinMeasure &END)
   : pin_INA(INA), pin_INB(INB), htimPWM(htimPWM), CCRx(CCRx), pin_END(END) {}
@@ -147,6 +147,17 @@ Motor::Motor(PinControl &INA, PinControl &INB,
 			 TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
 			 TIM_HandleTypeDef* htimENC, PinMeasure &END)
   : pin_INA(INA), pin_INB(INB), htimPWM(htimPWM), CCRx(CCRx), htimENC(htimENC), pin_END(END) {}
+*/
+Motor::Motor(PinControl INA, PinControl INB,
+			 TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
+			 PinMeasure END)
+  : pin_INA(INA), pin_INB(INB), htimPWM(htimPWM), CCRx(CCRx), htimENC(NULL), pin_END(END) {}
+
+Motor::Motor(PinControl INA, PinControl INB,
+			 TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
+			 TIM_HandleTypeDef* htimENC, PinMeasure END)
+  : pin_INA(INA), pin_INB(INB), htimPWM(htimPWM), CCRx(CCRx), htimENC(htimENC), pin_END(END) {}
+
 
 Motor::~Motor() {}
 
@@ -154,8 +165,12 @@ Motor::~Motor() {}
   this->encoder_invert = invert;
 }*/
 
-long Motor::getEncoder(){
-  return htimENC->Instance->CNT;
+int16_t Motor::getEncoder(){
+  if (htimENC != NULL) {
+	  return htimENC->Instance->CNT;
+  } else {
+	  return 0;
+  }
 }
 
 void Motor::invertMotor(bool invert){
@@ -223,15 +238,17 @@ bool Motor::isInEndStop(){
 // Robot
 // ==================================================
 
-Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div)
-  : pin_enable(enable), pin_toggle(toggle) {
+/*Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div)
+  : motors(motors), error_div(encs_div), pin_enable(enable), pin_toggle(toggle) {*/
+Robot::Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div)
+  : pin_enable(enable), pin_toggle(toggle), motors(motors), error_div(encs_div) {
   this->ts = ts_ms;
-  this->motors = 		(Motor**)	malloc(size * sizeof(Motor*));
+  //this->motors = 		(Motor**)	malloc(size * sizeof(Motor*));
   this->pids = 			(PID*)		malloc(size * sizeof(PID));
   this->switches = 		(bool*) 	malloc(size * sizeof(bool));
   this->motors_pwm = 	(int16_t*) 	malloc(size * sizeof(int16_t));
   this->encoders =		(int16_t*)	malloc(size * sizeof(int16_t));
-  this->error_div = 	(float*) 	malloc(size * sizeof(float));
+  //this->error_div = 	(float*) 	malloc(size * sizeof(float));
 
   this->size = size;
   this->status = Status::Idle;
@@ -244,7 +261,7 @@ Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_
     this->error_div[i] = 0.0;
   }
 
-  if(motors != NULL){
+  /*if(motors != NULL){
     for(int i = 0; i < size; i++){
       if(encs_div != NULL){
         setMotor(i, motors[i], encs_div[i]);
@@ -252,16 +269,22 @@ Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_
         setMotor(i, motors[i]);
       }
     }
-  }
+  }*/
 
   lastEvent = getCurrentTime();
   update();
 }
 
-Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors)
+/*Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors)
   : Robot(enable, toggle,ts_ms, size, motors, NULL) {}
 
 Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size)
+  : Robot(enable, toggle,ts_ms, size, NULL, NULL) {}*/
+
+Robot::Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size, Motor **motors)
+  : Robot(enable, toggle,ts_ms, size, motors, NULL) {}
+
+Robot::Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size)
   : Robot(enable, toggle,ts_ms, size, NULL, NULL) {}
 
 Robot::~Robot() {
@@ -351,7 +374,7 @@ void Robot::resetEncoders(){
 }*/
 
 int16_t Robot::getEncoder(uint8_t index) {
-	return this->encoders[index];
+	return getMotor(index)->getEncoder();
 }
 
 void Robot::setPWMs(const int16_t *pwms){
@@ -384,7 +407,7 @@ void Robot::disableMotors(){
 
 void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
 
-  if(request->command > 2 || request->num_motors != size) {
+  if(request->command > 2) {
     setStatus(Status::Idle, true);
     return;
   }
@@ -396,12 +419,7 @@ void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
         encoders[i] = 0;
       }
       break;
-    /*case (unsigned char) Command::DAQ:
-      for(int i = 0; i < size; i++) {
-        motors_pwm[i] = request->encoders[i];
-        encoders[i] = 0;
-      }
-      break;*/
+
     case (unsigned char) Command::PID:
       for(int i = 0; i < size; i++) {
         motors_pwm[i] = 0;
@@ -504,7 +522,7 @@ void Robot::actuate(){
   }
 }*/
 
-void Robot::cycle(unsigned long time_ms){
+void Robot::cycle(){
       //if (getElapsedTime(lastEvent) >= time_ms){
     	//lastEvent = getCurrentTime();
         pin_toggle.set(true);
