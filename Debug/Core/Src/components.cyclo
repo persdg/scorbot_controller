@@ -14,40 +14,40 @@
 ../Core/Src/components.cpp:168:9:int16_t Motor::getEncoder()	2
 ../Core/Src/components.cpp:176:6:void Motor::invertMotor(bool)	1
 ../Core/Src/components.cpp:179:6:void Motor::driveMotor(int16_t)	15
-../Core/Src/components.cpp:232:6:bool Motor::isInEndStop()	1
-../Core/Src/components.cpp:243:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t, Motor**, float*)	2
-../Core/Src/components.cpp:284:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t, Motor**)	1
-../Core/Src/components.cpp:287:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t)	1
-../Core/Src/components.cpp:290:1:Robot::~Robot()	1
-../Core/Src/components.cpp:299:5:int Robot::getSize()	1
-../Core/Src/components.cpp:303:15:Robot::Status Robot::getStatus()	1
-../Core/Src/components.cpp:307:6:void Robot::setStatus(Robot::Status, bool)	3
-../Core/Src/components.cpp:315:9:Motor* Robot::getMotor(uint8_t)	1
-../Core/Src/components.cpp:319:6:void Robot::setMotor(uint8_t, Motor*)	1
-../Core/Src/components.cpp:323:6:void Robot::setMotor(uint8_t, Motor*, float)	1
-../Core/Src/components.cpp:328:6:void Robot::setEncoderDivider(uint8_t, float)	1
-../Core/Src/components.cpp:332:7:PID* Robot::getPID(uint8_t)	1
-../Core/Src/components.cpp:336:6:void Robot::initPIDs(float, float, float, bool)	2
-../Core/Src/components.cpp:342:6:void Robot::setupPIDs(float, float, float)	2
-../Core/Src/components.cpp:348:6:void Robot::resetPIDs()	2
-../Core/Src/components.cpp:376:9:int16_t Robot::getEncoder(uint8_t)	1
-../Core/Src/components.cpp:380:6:void Robot::setPWMs(const int16_t*)	2
-../Core/Src/components.cpp:386:6:void Robot::setPWM(uint8_t, int16_t)	1
-../Core/Src/components.cpp:391:6:void Robot::resetPWMs()	2
-../Core/Src/components.cpp:398:6:void Robot::enableMotors()	1
-../Core/Src/components.cpp:403:6:void Robot::disableMotors()	1
-../Core/Src/components.cpp:408:6:void Robot::rcvCtrl(racs_services__srv__Control_Request*)	6
-../Core/Src/components.cpp:434:6:void Robot::sndCtrl(racs_services__srv__Control_Response*)	1
-../Core/Src/components.cpp:438:6:void Robot::rcvSetup(racs_services__srv__Setup_Request*)	1
-../Core/Src/components.cpp:448:6:void Robot::sndSetup(racs_services__srv__Setup_Response*)	1
-../Core/Src/components.cpp:452:6:void Robot::update()	8
-../Core/Src/components.cpp:480:6:void Robot::actuate()	2
-../Core/Src/components.cpp:525:6:void Robot::cycle()	1
-../Core/Src/components.cpp:535:7:Robot create_robot()	1
+../Core/Src/components.cpp:235:6:bool Motor::isInEndStop()	1
+../Core/Src/components.cpp:246:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t, Motor**, float*)	2
+../Core/Src/components.cpp:287:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t, Motor**)	1
+../Core/Src/components.cpp:290:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t)	1
+../Core/Src/components.cpp:293:1:Robot::~Robot()	1
+../Core/Src/components.cpp:302:5:int Robot::getSize()	1
+../Core/Src/components.cpp:306:15:Robot::Status Robot::getStatus()	1
+../Core/Src/components.cpp:310:6:void Robot::setStatus(Robot::Status, bool)	3
+../Core/Src/components.cpp:318:9:Motor* Robot::getMotor(uint8_t)	1
+../Core/Src/components.cpp:322:6:void Robot::setMotor(uint8_t, Motor*)	1
+../Core/Src/components.cpp:326:6:void Robot::setMotor(uint8_t, Motor*, float)	1
+../Core/Src/components.cpp:331:6:void Robot::setEncoderDivider(uint8_t, float)	1
+../Core/Src/components.cpp:335:7:PID* Robot::getPID(uint8_t)	1
+../Core/Src/components.cpp:339:6:void Robot::initPIDs(float, float, float, bool)	2
+../Core/Src/components.cpp:345:6:void Robot::setupPIDs(float, float, float)	2
+../Core/Src/components.cpp:351:6:void Robot::resetPIDs()	2
+../Core/Src/components.cpp:379:9:int16_t Robot::getEncoder(uint8_t)	1
+../Core/Src/components.cpp:383:6:void Robot::setPWMs(const int16_t*)	2
+../Core/Src/components.cpp:389:6:void Robot::setPWM(uint8_t, int16_t)	1
+../Core/Src/components.cpp:394:6:void Robot::resetPWMs()	2
+../Core/Src/components.cpp:401:6:void Robot::enableMotors()	1
+../Core/Src/components.cpp:406:6:void Robot::disableMotors()	1
+../Core/Src/components.cpp:411:6:void Robot::rcvCtrl(racs_services__srv__Control_Request*)	6
+../Core/Src/components.cpp:437:6:void Robot::sndCtrl(racs_services__srv__Control_Response*)	1
+../Core/Src/components.cpp:441:6:void Robot::rcvSetup(racs_services__srv__Setup_Request*)	1
+../Core/Src/components.cpp:451:6:void Robot::sndSetup(racs_services__srv__Setup_Response*)	1
+../Core/Src/components.cpp:455:6:void Robot::update()	8
+../Core/Src/components.cpp:483:6:void Robot::actuate()	2
+../Core/Src/components.cpp:528:6:void Robot::cycle()	1
+../Core/Src/components.cpp:538:7:Robot create_robot()	1
 /home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:254:5:constexpr const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = short int]	2
 /home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:230:5:constexpr const _Tp& std::min(const _Tp&, const _Tp&) [with _Tp = short int]	2
 /home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:254:5:constexpr const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = float]	2
 /home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:230:5:constexpr const _Tp& std::min(const _Tp&, const _Tp&) [with _Tp = float]	2
-../Core/Src/components.cpp:584:31:void __static_initialization_and_destruction_0(int, int)	5
-../Core/Src/components.cpp:584:31:cpp)	1
-../Core/Src/components.cpp:584:31:cpp)	1
+../Core/Src/components.cpp:587:31:void __static_initialization_and_destruction_0(int, int)	5
+../Core/Src/components.cpp:587:31:cpp)	1
+../Core/Src/components.cpp:587:31:cpp)	1

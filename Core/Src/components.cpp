@@ -178,7 +178,7 @@ void Motor::invertMotor(bool invert){
 }
 void Motor::driveMotor(int16_t spwm){
   OperatingMode mode = OperatingMode::BRAKE_GND;
-  spwm = std::min(std::max(spwm, (int16_t)-255), (int16_t)255);
+  spwm = std::min(std::max(spwm, (int16_t) -30000), (int16_t) 30000);
 
   if(spwm > 0) {
     mode = motor_invert ? OperatingMode::SPIN_CCW : OperatingMode::SPIN_CW;
@@ -206,9 +206,12 @@ void Motor::driveMotor(int16_t spwm){
       pin_INB.set(true);
       break;
   }
+  int a,b;
   switch(CCRx) {
     case 1:
       htimPWM->Instance->CCR1 = (uint16_t) abs(spwm);
+      a = TIM1->CCR1;
+      b = TIM1->CNT;
       break;
     case 2:
       htimPWM->Instance->CCR2 = (uint16_t) abs(spwm);
