@@ -29,6 +29,7 @@
 #include <racs_services/srv/setup.h>
 #include <racs_services/msg/feedback.h>
 #include <racs_services/msg/direct_access.h>
+#include <racs_services/msg/encoder.h>
 #include <rcl/error_handling.h>
 #include <rcl/rcl.h>
 #include <rclc/executor.h>
@@ -65,6 +66,7 @@
 /* USER CODE BEGIN Variables */
 extern Robot ScorBot;
 rcl_publisher_t feedback_publisher;
+rcl_publisher_t debug_publisher;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -73,13 +75,6 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 3000 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for cycleRobot */
-osThreadId_t cycleRobotHandle;
-const osThreadAttr_t cycleRobot_attributes = {
-  .name = "cycleRobot",
-  .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -87,7 +82,6 @@ const osThreadAttr_t cycleRobot_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
-void cycleRobotTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -120,9 +114,6 @@ void MX_FREERTOS_Init(void) {
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
-
-  /* creation of cycleRobot */
-  cycleRobotHandle = osThreadNew(cycleRobotTask, NULL, &cycleRobot_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -160,26 +151,30 @@ void StartDefaultTask(void *argument)
 
 	if (!rcutils_set_default_allocator(&freeRTOS_allocator)) return;
 
-	//Robot ScorBot = create_robot();
-
 	rcl_ret_t rc;
 	rcl_node_t node; // nodo;
 	rcl_timer_t feedback_timer, robot_timer;
-	const unsigned int feedback_timer_period = RCL_MS_TO_NS(1000);
+	const unsigned int feedback_timer_period = RCL_MS_TO_NS(10);
 	const unsigned int robot_timer_period = RCL_MS_TO_NS(10);
 	//rcl_publisher_t feedback_publisher; // publisher
-	rcl_subscription_t subscriber;
+	rcl_subscription_t pwm_subscriber, encoder_subscriber;
 	rcl_service_t setup_service, control_service; //servizi
 
-	const char* feedback_publisher_name = "/feedback";	//publisher
-	const char* pwm_subscriber_name = "/pwm";			//subscriber
+	const char* feedback_publisher_name = "/feedback";	//publishers
+	const char* debug_publisher_name = "/debug";
+	const char* pwm_subscriber_name = "/pwm";			//subscribers
+	const char* encoder_subscriber_name = "/encoder";
 	const char* setup_service_name = "/setup";			//servizi
 	const char* control_service_name = "/control";
 
 	const rosidl_message_type_support_t* feedback_type_support =
 		ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, Feedback);
 	const rosidl_message_type_support_t * pwm_type_support =
-	  ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, DirectAccess);
+		ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, DirectAccess);
+	const rosidl_message_type_support_t * encoder_type_support =
+		ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, Encoder);
+	const rosidl_message_type_support_t * debug_type_support =
+		ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, Debug);
 	const rosidl_service_type_support_t* setup_type_support =
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Setup);
 	const rosidl_service_type_support_t* control_type_support =
@@ -189,6 +184,7 @@ void StartDefaultTask(void *argument)
 	rcl_allocator_t allocator;// allocator_p;
 
 	racs_services__msg__DirectAccess pwm_msg;
+	racs_services__msg__Encoder encoder_msg;
 
 	racs_services__srv__Setup_Request req_setup;
 	racs_services__srv__Setup_Response res_setup;
@@ -213,8 +209,16 @@ void StartDefaultTask(void *argument)
 	  &feedback_publisher, &node, feedback_type_support, feedback_publisher_name);
 	if (rc != RCL_RET_OK) return;
 
+	rc = rclc_publisher_init_best_effort(
+	  &debug_publisher, &node, debug_type_support, debug_publisher_name);
+	if (rc != RCL_RET_OK) return;
+
 	rc = rclc_subscription_init_best_effort(
-	  &subscriber, &node, pwm_type_support, pwm_subscriber_name);
+	  &pwm_subscriber, &node, pwm_type_support, pwm_subscriber_name);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_subscription_init_best_effort(
+	  &encoder_subscriber, &node, encoder_type_support, encoder_subscriber_name);
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_service_init_default(
@@ -227,7 +231,7 @@ void StartDefaultTask(void *argument)
 
 	rclc_executor_t executor;
 	executor = rclc_executor_get_zero_initialized_executor();
-	unsigned int num_handles = 5; //2 servizi, 2 timer e 1 sub
+	unsigned int num_handles = 6; //2 servizi, 2 timer e 2 subs
 	rclc_executor_init(&executor, &support.context, num_handles, &allocator);
 
 	rc = rclc_executor_add_timer(&executor, &feedback_timer);
@@ -237,8 +241,13 @@ void StartDefaultTask(void *argument)
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_executor_add_subscription(
-	  &executor, &subscriber, &pwm_msg,
+	  &executor, &pwm_subscriber, &pwm_msg,
 	  &pwm_callback, ON_NEW_DATA);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_executor_add_subscription(
+	  &executor, &encoder_subscriber, &encoder_msg,
+	  &encoder_callback, ON_NEW_DATA);
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_executor_add_service(
@@ -260,24 +269,6 @@ void StartDefaultTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
-}
-
-/* USER CODE BEGIN Header_cycleRobotTask */
-/**
-* @brief Function implementing the cycleRobot thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_cycleRobotTask */
-void cycleRobotTask(void *argument)
-{
-  /* USER CODE BEGIN cycleRobotTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END cycleRobotTask */
 }
 
 /* Private application code --------------------------------------------------*/

@@ -5,5 +5,3 @@
 ../Core/Src/utils.cpp:25:7:float remap(long int, long int, long int, float, float, bool)	32	static
 ../Core/Src/utils.cpp:29:6:long int remap(float, float, float, long int, long int, bool)	32	static
 ../Core/Src/utils.cpp:32:6:long int remap(long int, long int, long int, long int, long int, bool)	24	static
-../Core/Src/utils.cpp:36:10:uint32_t getCurrentTime()	8	static
-../Core/Src/utils.cpp:40:10:uint32_t getElapsedTime(uint32_t)	24	static

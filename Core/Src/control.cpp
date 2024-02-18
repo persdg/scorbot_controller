@@ -1,6 +1,5 @@
 #include "control.hpp"
 
-
 // Integrator
 
 void Integrator::init(float ts)
@@ -47,26 +46,33 @@ float Integrator::evolve(float u)
 
 // PID
 
-void PID::init(float ts, float pole, float sat, bool bumpless)
+void PID::init(float ts, float tau, float sat, bool bumpless)
 {
   this->ts = ts;
-  this->pole = pole;
+  this->tau = tau;
   this->sat = sat;
   this->bumpless = bumpless;
+  this->antiWindUp = Filter();
+  antiWindUp.init(tau, ts);
 
-  if(pole > 0)
+  if(tau > 0)
   {
-    A = exp(-pole*ts);
+	A = (2*tau - ts)/(2*tau + ts);
+	B = 1;
+	C = -4*ts/((ts+2*tau)*(ts+2*tau));
+	D = 2 / (ts + 2*tau);
+
+    /*A = exp(-pole*ts);
     B = (1-A)/pole;
     C = -pole*pole;
-    D = pole;
+    D = pole;*/
   }
   else
   {
-    A = 0;
-    B = 1;
-    C = -1/ts;
-    D = 1/ts;
+	  A = 0;
+	  B = 0;
+	  C = 0;
+	  D = 0;
   }
 
   apply_saturation();
@@ -98,8 +104,9 @@ void PID::input(float e)
 }
 
 void PID::step()
-{  
-  xi = xi + (bumpless ? ki*ts*e : ts*e);
+{
+  //xi = xi + (bumpless ? ki*ts*e : ts*e);
+  xi = antiWindUp.evolve(xi) + (bumpless ? ki*ts*e : ts*e);
   xd = A*xd + (bumpless ? kd*B*e : B*e);
 
   apply_saturation();
@@ -126,6 +133,16 @@ float PID::evolve(float e)
   return u;
 }
 
+void PID::show(int i, racs_services__msg__Debug &debug_msg)
+{
+	debug_msg.data[0] = (float) i;
+	debug_msg.data[1] = xi;
+	debug_msg.data[2] = antiWindUp.output();
+	debug_msg.data[3] = 0;
+	debug_msg.data[4] = 0;
+	debug_msg.data[5] = 0;
+}
+
 void PID::apply_saturation()
 {
   if(sat > 0)
@@ -140,9 +157,20 @@ void PID::apply_saturation()
 
 void Filter::init(float tau, float ts)
 {
-  A = exp(-ts/tau);
+
+  A = 1;
+  B = 1;
+  C = ts / tau;
+  D = (ts + 2 * tau)/(2 * tau);
+
+  /*A = (2*tau - ts) / (2*tau + ts);
+  B = 1;
+  C = 4 * tau * ts / ((ts + 2 * tau) * (ts + 2 * tau));
+  D = ts / (ts + 2 * tau);*/
+
+  /*A = exp(-ts/tau);
   B = (1-A)*tau;
-  C = 1/tau;
+  C = 1/tau;*/
 }
 
 void Filter::reset()
@@ -167,7 +195,7 @@ void Filter::step()
 
 float Filter::output()
 {
-  return C*x;
+  return C*x + D*u;
 }
 
 float Filter::evolve(float u)

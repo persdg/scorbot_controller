@@ -10,6 +10,8 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/DirectAccess.msg"
+  "msg/Debug.msg"
+  "msg/Encoder.msg"
   "msg/Feedback.msg"
   "srv/Control.srv"
   "srv/Setup.srv"

@@ -33,7 +33,7 @@ long remap( long v,  long a1,  long b1,  long a2,  long b2, bool clamp = false){
   return round(remap((float) v, (float) a1, (float) b1, (float) a2, (float) b2, clamp));
 }
 
-uint32_t getCurrentTime() {
+/*uint32_t getCurrentTime() {
     return HAL_GetTick();
 }
 
@@ -49,50 +49,4 @@ uint32_t getElapsedTime(uint32_t startTime) {
     }
 
     return elapsedTime;
-}
-
-
-/*// ==================================================
-// Timer
-// ==================================================
-
-Timer::Timer(){
-  this->delta = 0;
-  this->time = 0;
-}
-
-Timer::Timer(unsigned long delta){
-  this->delta = delta;
-  this->time = 0;
-}
-
-Timer::Timer(unsigned long delta, unsigned long time){
-  this->delta = delta;
-  this->time = time;
-}
-
-void Timer::setup(unsigned long delta){
-  this->delta = delta;
-}
-
-void Timer::reset(unsigned long time){
-  this->time = time;
-}
-
-bool Timer::check(unsigned long time){
-  unsigned long dt;
-
-  if(time < this->time){
-    dt = 4294967295 - this->time;
-    dt = time + dt + 1;
-  } else {
-    dt = time - this->time;
-  }
-
-  if(dt >= delta){
-    this->time = time;
-    return true;
-  } else {
-    return false;
-  }
 }*/

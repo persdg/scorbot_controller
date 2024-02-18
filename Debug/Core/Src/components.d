@@ -1,5 +1,30 @@
 Core/Src/components.o: ../Core/Src/components.cpp \
  ../Core/Inc/components.hpp ../Core/Inc/utils.hpp ../Core/Inc/control.hpp \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/debug.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__functions.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/action_type_support_struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/message_type_support_struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/type_description__struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/individual_type_description__struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/string.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/primitives_sequence.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/field__struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/field_type__struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/type_source__struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_hash.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/allocator.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/macros.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/configuration_flags.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/types/rcutils_ret.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/visibility_control.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/visibility_control_macros.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/sha256.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/visibility_control.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_typesupport_interface/macros.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/service_type_support_struct.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/rosidl_generator_c__visibility_control.h \
+ ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__type_support.h \
  ../Core/Inc/main.h ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
@@ -38,36 +63,40 @@ Core/Src/components.o: ../Core/Src/components.cpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/service_msgs/msg/detail/service_event_info__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/builtin_interfaces/msg/detail/time__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/control__functions.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/action_type_support_struct.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/message_type_support_struct.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/type_description__struct.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/individual_type_description__struct.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/string.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/primitives_sequence.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/field__struct.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/field_type__struct.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/type_source__struct.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_hash.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/allocator.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/macros.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/configuration_flags.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/types/rcutils_ret.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/visibility_control.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/visibility_control_macros.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/sha256.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/visibility_control.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_typesupport_interface/macros.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/service_type_support_struct.h \
- ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/rosidl_generator_c__visibility_control.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/control__type_support.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/setup.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__functions.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h \
- ../Core/Inc/tim.h ../Core/Inc/main.h
+ ../Core/Inc/tim.h ../Core/Inc/main.h ../Core/Inc/parameters.hpp
 ../Core/Inc/components.hpp:
 ../Core/Inc/utils.hpp:
 ../Core/Inc/control.hpp:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/debug.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__functions.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/action_type_support_struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/message_type_support_struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/type_description__struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/individual_type_description__struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/string.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/primitives_sequence.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/field__struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/field_type__struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/type_source__struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_hash.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/allocator.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/macros.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/configuration_flags.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/types/rcutils_ret.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/visibility_control.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/visibility_control_macros.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/sha256.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/visibility_control.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_typesupport_interface/macros.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/service_type_support_struct.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/rosidl_generator_c__visibility_control.h:
+../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__type_support.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -107,27 +136,6 @@ Core/Src/components.o: ../Core/Src/components.cpp \
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/service_msgs/msg/detail/service_event_info__struct.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/builtin_interfaces/msg/detail/time__struct.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/control__functions.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/action_type_support_struct.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/message_type_support_struct.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/type_description__struct.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/individual_type_description__struct.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/string.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/primitives_sequence.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/field__struct.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/field_type__struct.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_description/type_source__struct.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/type_hash.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/allocator.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/macros.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/configuration_flags.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/types/rcutils_ret.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/visibility_control.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/visibility_control_macros.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rcutils/sha256.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/visibility_control.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_typesupport_interface/macros.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/rosidl_runtime_c/service_type_support_struct.h:
-../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/rosidl_generator_c__visibility_control.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/control__type_support.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/setup.h:
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__struct.h:
@@ -135,3 +143,4 @@ Core/Src/components.o: ../Core/Src/components.cpp \
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/srv/detail/setup__type_support.h:
 ../Core/Inc/tim.h:
 ../Core/Inc/main.h:
+../Core/Inc/parameters.hpp:

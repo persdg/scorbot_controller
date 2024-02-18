@@ -116,7 +116,6 @@ private:
   //PinMeasure &pin_END;          // endstop switch
   PinMeasure pin_END;
   bool motor_invert = false;    // If invert motor physical spin direction
-  uint32_t lastEvent;
 };
 
 
@@ -161,12 +160,9 @@ public:
   void setupPIDs(float kp, float ki, float kd);                   // Initialize all PIDs with following coefficients
   void resetPIDs();                                               // Reset all PIDs state
 
-  //void updateEncoders();                        // Update all motors' encoders
-  //void setEncoders(long *values);               // Set encoders' values
-  //void setEncoder(uint8_t index, long value);   // Set encoder value for motor specified by index
-  //void resetEncoders();                         // Reset all motors' encoders
-
   int16_t getEncoder(uint8_t index);
+  void setEncoder(uint8_t i, const int16_t enc);
+  void setEncoders(const int16_t *encs);
 
   void setPWMs(const int16_t *pwms);                    // Set motors' PWMs values
   void setPWM(uint8_t index, const int16_t pwm);     // Set PWM value for motor specified by index
@@ -184,7 +180,6 @@ public:
   void actuate();                     // Apply computed PWMs
   void cycle();  // Looping function
 
-  uint32_t lastEvent;
 private:
   /*PinControl &pin_enable; // Pin for motors enabling/disabling
   PinControl &pin_toggle; // Pin for motors enabling/disabling*/

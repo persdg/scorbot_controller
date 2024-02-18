@@ -1,4 +1,5 @@
 #include <components.hpp>
+#include <parameters.hpp>
 
 //#include <algorithm>
 
@@ -32,36 +33,6 @@ void PinControl::set(bool state){
   HAL_GPIO_WritePin(port, pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
-/*
- * Probabilmente non serve, occorre fare qualcosa di diverso per controllare le pwm
- * Forse questa cosa da fare va aggiunta alla classe Motor
- *
- void PinControl::pwm(uint8_t pwm){
-  switch(pwm) {
-    case 1:
-      TIM1->CCR1 = pwm;
-      break;
-    case 2:
-      TIM1->CCR2 = pwm;
-      break;
-    case 3:
-      TIM1->CCR3 = pwm;
-      break;
-    case 4:
-      TIM1->CCR4 = pwm;
-      break;
-    case 5:
-      TIM9->CCR1 = pwm;
-      break;
-    case 6:
-      TIM9->CCR2 = pwm;
-      break;
-  }
-}
-void PinControl::control(float value){
-  pwm(remap(value, v1, v2, 0l, 255l, true));
-}
-*/
 #if defined(PIN_EXTRA_FEATURES)
 /*
 void PinControl::feedback(float error){
@@ -167,7 +138,7 @@ Motor::~Motor() {}
 
 int16_t Motor::getEncoder(){
   if (htimENC != NULL) {
-	  return htimENC->Instance->CNT;
+	  return htimENC->Instance->CNT - (HALF_ENC+1);
   } else {
 	  return 0;
   }
@@ -178,7 +149,9 @@ void Motor::invertMotor(bool invert){
 }
 void Motor::driveMotor(int16_t spwm){
   OperatingMode mode = OperatingMode::BRAKE_GND;
-  spwm = std::min(std::max(spwm, (int16_t) -30000), (int16_t) 30000);
+  spwm = spwm > -(HALF_PWM+1) ? spwm : -(HALF_PWM+1);
+  spwm = spwm < HALF_PWM ? spwm : HALF_PWM;
+  //spwm = (int16_t) std::min(std::max(spwm, (int16_t) -(HALF_PWM+1)), (int16_t) HALF_PWM);
 
   if(spwm > 0) {
     mode = motor_invert ? OperatingMode::SPIN_CCW : OperatingMode::SPIN_CW;
@@ -206,12 +179,9 @@ void Motor::driveMotor(int16_t spwm){
       pin_INB.set(true);
       break;
   }
-  int a,b;
   switch(CCRx) {
     case 1:
       htimPWM->Instance->CCR1 = (uint16_t) abs(spwm);
-      a = TIM1->CCR1;
-      b = TIM1->CNT;
       break;
     case 2:
       htimPWM->Instance->CCR2 = (uint16_t) abs(spwm);
@@ -245,6 +215,7 @@ bool Motor::isInEndStop(){
   : motors(motors), error_div(encs_div), pin_enable(enable), pin_toggle(toggle) {*/
 Robot::Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div)
   : pin_enable(enable), pin_toggle(toggle), motors(motors), error_div(encs_div) {
+
   this->ts = ts_ms;
   //this->motors = 		(Motor**)	malloc(size * sizeof(Motor*));
   this->pids = 			(PID*)		malloc(size * sizeof(PID));
@@ -255,26 +226,14 @@ Robot::Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t 
 
   this->size = size;
   this->status = Status::Idle;
-  this->lastEvent = getCurrentTime();
 
   for(int i = 0; i < size; i++){
     this->switches[i] = false;
     this->motors_pwm[i] = 0;
     this->encoders[i] = 0;
-    this->error_div[i] = 0.0;
+    this->pids[i] = PID();
   }
 
-  /*if(motors != NULL){
-    for(int i = 0; i < size; i++){
-      if(encs_div != NULL){
-        setMotor(i, motors[i], encs_div[i]);
-      } else {
-        setMotor(i, motors[i]);
-      }
-    }
-  }*/
-
-  lastEvent = getCurrentTime();
   update();
 }
 
@@ -354,30 +313,18 @@ void Robot::resetPIDs(){
   }
 }
 
-/*void Robot::updateEncoders(){
-  for(int i = 0; i < size; i++){
-    getMotor(i)->updateEncoder();
-  }
-}*/
-
-/*void Robot::setEncoders(long *values){
-  for(int i = 0; i < size; i++){
-    setEncoder(i, values[i]);
-  }
-}
-
-void Robot::setEncoder(uint8_t index, long value){
-  getMotor(index)->setEncoder(value);
-}
-
-void Robot::resetEncoders(){
-  for(int i = 0; i < size; i++){
-    setEncoder(i, 0);
-  }
-}*/
-
 int16_t Robot::getEncoder(uint8_t index) {
 	return getMotor(index)->getEncoder();
+}
+
+void Robot::setEncoder(uint8_t i, const int16_t enc) {
+	encoders[i] = enc;
+}
+
+void Robot::setEncoders(const int16_t *encs) {
+  for(int i = 0; i < 5; i++) {
+    setEncoder(i, encs[i]);
+  }
 }
 
 void Robot::setPWMs(const int16_t *pwms){
@@ -462,9 +409,10 @@ void Robot::update(){
       break;
 
     case Status::PID:
-      for(int i = 0; i < size; i++){
-        float err = (float) (getMotor(i)->getEncoder() - encoders[i]) / ((error_div[i] == 0) ? 1.0 : error_div[i]);
-    	motors_pwm[i] = (int16_t) std::min(std::max((float) 0, getPID(i)->evolve(err)), (float) MAX_PWM) - HALF_PWM;
+      for(int i = 0; i < 1; i++){
+        float err = (float) (encoders[i] - getMotor(i)->getEncoder()) / ((error_div[i] == 0) ? 1.0 : error_div[i]);
+        float gettopiddo = getPID(i)->evolve(err);
+    	motors_pwm[i] = (int16_t) std::min(std::max((float) -(HALF_PWM+1), gettopiddo), (float) HALF_PWM);
       }
       break;
 
@@ -486,53 +434,11 @@ void Robot::actuate(){
   }
 }
 
-/*void Robot::cycle(unsigned long time_ms){
-  //updateEncoders();
-  //Communication::Next next = peek(); da cancellare?
-
-  if(next == Communication::Next::Setup){
-    //rcvSetup();
-    //sndSetup();
-    timer.reset(time_ms);
-  } else if (next == Communication::Next::Error) {
-    //Serial.flush(); da cambiare, non c'è il seriale
-    setStatus(Robot::Status::Idle, true);
-    timer.reset(time_ms);
-  } else {
-    if(getStatus() == Robot::Status::Idle && next == Communication::Next::Ctrl){
-      pin_toggle.set(true);
-      //rcvCtrl();
-      update();
-      actuate();
-      pin_toggle.set(false);
-      timer.reset(time_ms);
-      if(getStatus() == Robot::Status::Idle) {
-        //sndCtrl();
-      }
-    } else if (getStatus() != Robot::Status::Idle) {
-      if (timer.check(time_ms)){
-        pin_toggle.set(true);
-        //sndCtrl();
-        //rcvCtrl();
-        update();
-        actuate();
-        pin_toggle.set(false);
-        if(getStatus() == Robot::Status::Idle){
-          //sndCtrl();
-        }
-      }
-    }
-  }
-}*/
-
 void Robot::cycle(){
-      //if (getElapsedTime(lastEvent) >= time_ms){
-    	//lastEvent = getCurrentTime();
         pin_toggle.set(true);
         update();
         actuate();
         pin_toggle.set(false);
-      //}
 }
 
 Robot create_robot() {
@@ -572,14 +478,38 @@ Robot create_robot() {
 	Motor motor6 = Motor(mot6_ina, mot6_inb, &htim9, 2, 		mot6_end);
 
 	Motor** motors = (Motor**) malloc(sizeof(Motor*)*6);
-	//Motor** motors = (Motor**) malloc(sizeof(Motor*)*1);
 	float* encs_div = (float*) malloc(sizeof(float)*6);
-	//float* encs_div = (float*) malloc(sizeof(float)*1);
 
 	motors[0] = &motor1; motors[1] = &motor2; motors[2] = &motor3; motors[3] = &motor4; motors[4] = &motor5; motors[5] = &motor6;
 	encs_div[0] = 1; encs_div[1] = 1; encs_div[2] = 1; encs_div[3] = 1; encs_div[4] = 1; encs_div[5] = 1;
 	Robot myRobot = Robot(enable, toggle, TS, 6, motors, encs_div);
-	//Robot myRobot = Robot(enable, toggle, TS, 1, motors, encs_div);
+
+	myRobot.setStatus(Robot::Status::Idle, true);
+
+	myRobot.setEncoderDivider(0, ENC_1_DIV);
+	myRobot.getPID(0)->reset();
+	myRobot.getPID(0)->init((float) TS/1000.0, PID_1_POLE, PID_1_SAT, true);
+	myRobot.getPID(0)->setup(PID_1_KP, PID_1_KI, PID_1_KD);
+
+	myRobot.setEncoderDivider(1, ENC_2_DIV);
+	myRobot.getPID(1)->reset();
+	myRobot.getPID(1)->init((float) TS/1000.0, PID_2_POLE, PID_2_SAT, true);
+	myRobot.getPID(1)->setup(PID_2_KP, PID_2_KI, PID_2_KD);
+
+	myRobot.setEncoderDivider(2, ENC_3_DIV);
+	myRobot.getPID(2)->reset();
+	myRobot.getPID(2)->init((float) TS/1000.0, PID_3_POLE, PID_3_SAT, true);
+	myRobot.getPID(2)->setup(PID_3_KP, PID_3_KI, PID_3_KD);
+
+	myRobot.setEncoderDivider(3, ENC_4_DIV);
+	myRobot.getPID(3)->reset();
+	myRobot.getPID(3)->init((float) TS/1000.0, PID_4_POLE, PID_4_SAT, true);
+	myRobot.getPID(3)->setup(PID_4_KP, PID_4_KI, PID_4_KD);
+
+	myRobot.setEncoderDivider(4, ENC_5_DIV);
+	myRobot.getPID(4)->reset();
+	myRobot.getPID(4)->init((float) TS/1000.0, PID_5_POLE, PID_5_SAT, true);
+	myRobot.getPID(4)->setup(PID_5_KP, PID_5_KI, PID_5_KD);
 
 	return myRobot;
 }

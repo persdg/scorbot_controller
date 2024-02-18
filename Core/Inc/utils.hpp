@@ -15,7 +15,7 @@ float remap(long v,  long a1,  long b1, float a2, float b2, bool clamp);
 double remap(float v, float a1, float b1,  double a2, double b2, bool clamp);
 double remap(double v, double a1, double b1, double a2, double b2, bool clamp);
 
-uint32_t getCurrentTime();
-uint32_t getElapsedTime(uint32_t startTime);
+/*uint32_t getCurrentTime();
+uint32_t getElapsedTime(uint32_t startTime);*/
 
 #endif  // UTILS_HPP
