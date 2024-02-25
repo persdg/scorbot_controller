@@ -1,10 +1,12 @@
 #include "control.hpp"
+#include <cmath>
 
 // Integrator
 
-void Integrator::init(float ts)
+void Integrator::init(float ts, float sat)
 {
   this->ts = ts;
+  this->sat = sat;
 }
 
 void Integrator::reset()
@@ -25,6 +27,7 @@ void Integrator::input(float u)
 void Integrator::step()
 {
   x = x + ts*u;
+  apply_saturation();
 }
 
 float Integrator::output()
@@ -43,39 +46,27 @@ float Integrator::evolve(float u)
   return y;
 }
 
+void Integrator::apply_saturation()
+{
+	x = x > +sat ? +sat : x;
+	x = x < -sat ? -sat : x;
+}
+
 
 // PID
 
 void PID::init(float ts, float tau, float sat, bool bumpless)
 {
   this->ts = ts;
-  this->tau = tau;
+  this->N = N;
   this->sat = sat;
   this->bumpless = bumpless;
-  this->antiWindUp = Filter();
-  antiWindUp.init(tau, ts);
+  this->integrator = Integrator();
+  this->derivator = Filter();
+  this->lowPassFilter = Filter();
 
-  if(tau > 0)
-  {
-	A = (2*tau - ts)/(2*tau + ts);
-	B = 1;
-	C = -4*ts/((ts+2*tau)*(ts+2*tau));
-	D = 2 / (ts + 2*tau);
-
-    /*A = exp(-pole*ts);
-    B = (1-A)/pole;
-    C = -pole*pole;
-    D = pole;*/
-  }
-  else
-  {
-	  A = 0;
-	  B = 0;
-	  C = 0;
-	  D = 0;
-  }
-
-  apply_saturation();
+  integrator.init(ts, 200);
+  derivator.init(tau, 1, 0, 1, ts);			// Td*s/(1+s*Td/N)
 }
 
 void PID::setup(float kp, float ki, float kd)
@@ -90,12 +81,10 @@ void PID::reset()
   reset(0.0, 0.0);
 }
 
-void PID::reset(float xi, float xd)
+void PID::reset(float u2, float u3)
 {
-  this-> xi = xi;
-  this-> xd = xd;
-
-  apply_saturation();
+  this-> u2 = u2; //xi
+  this-> u3 = u3; //xd
 }
 
 void PID::input(float e)
@@ -105,30 +94,28 @@ void PID::input(float e)
 
 void PID::step()
 {
-  //xi = xi + (bumpless ? ki*ts*e : ts*e);
-  xi = antiWindUp.evolve(xi) + (bumpless ? ki*ts*e : ts*e);
-  xd = A*xd + (bumpless ? kd*B*e : B*e);
+  bool sgn;
 
-  apply_saturation();
+  if (abs(e) > 0) {
+	  u1 = kp*e;
+  	  u2 = ki*integrator.evolve(e);
+  	  u3 = kd*derivator.evolve(e);
+  	  //sgn = (u1+u2+u3) >= 0;
+  	  u = apply_saturation(u1 + u2 + u3 /*+ (2*sgn-1)*9000*/);
+  } else
+	  u = 0;
 }
 
 float PID::output()
 {
-  float u;
-
-  if(bumpless) u = (kp + kd*D) * e + xi + C*xd;
-  else u = (kp + kd*D) * e + ki*xi + kd*C*xd;
-
   return u;
 }
 
 float PID::evolve(float e)
-{ 
-  float u;
-  
+{
   input(e);
-  u = output();
   step();
+  //u = output();
 
   return u;
 }
@@ -136,41 +123,53 @@ float PID::evolve(float e)
 void PID::show(int i, racs_services__msg__Debug &debug_msg)
 {
 	debug_msg.data[0] = (float) i;
-	debug_msg.data[1] = xi;
-	debug_msg.data[2] = antiWindUp.output();
-	debug_msg.data[3] = 0;
-	debug_msg.data[4] = 0;
-	debug_msg.data[5] = 0;
+	debug_msg.data[1] = u1  *100.0/32767.0;
+	debug_msg.data[2] = u2  *100.0/32767.0;
+	debug_msg.data[3] = u3  *100.0/32767.0;
+	debug_msg.data[4] = u   *100.0/32767.0;
+	debug_msg.data[5] = e;
 }
 
-void PID::apply_saturation()
+float PID::apply_saturation(float x)
 {
   if(sat > 0)
   {
-    xi = xi > +sat ? +sat : xi;
-    xi = xi < -sat ? -sat : xi;
+    x = x > +sat ? +sat : x;
+    x = x < -sat ? -sat : x;
   }
+  return x;
 }
 
 
 // Filter
 
-void Filter::init(float tau, float ts)
+void Filter::init(float a1, float a0, float b1, float b0, float ts)
 {
+  this->a1 = a1;
+  this->a0 = a0;
+  this->b1 = b1;
+  this->b0 = b0;
 
-  A = 1;
+  A = exp(-(a0/a1)*ts);
+  if (a0*a1 != 0) {
+	  C = ((a0*b1-a1*b0)/(a0*a1))*(exp((-a0/a1)*ts)-1);
+  }
+  else
+  {
+	  C = 0;
+  }
   B = 1;
-  C = ts / tau;
-  D = (ts + 2 * tau)/(2 * tau);
+  if (a1 != 0) {
+	  D = b1/a1;
+  } else
+  {
+	  D = 0;
+  }
 
-  /*A = (2*tau - ts) / (2*tau + ts);
+  /*A = -(-2*a1+a0*ts)/(2*a1+a0*ts);
   B = 1;
-  C = 4 * tau * ts / ((ts + 2 * tau) * (ts + 2 * tau));
-  D = ts / (ts + 2 * tau);*/
-
-  /*A = exp(-ts/tau);
-  B = (1-A)*tau;
-  C = 1/tau;*/
+  C = ((2*b1+b0*ts)/(2*a1+a0*ts)) * ((-2*a1+a0*ts)/(2*a1+a0*ts) + (-2*b1+b0*ts)/(2*b1+b0*ts));
+  D = ((2*b1+b0*ts)/(2*a1+a0*ts));*/
 }
 
 void Filter::reset()

@@ -64,7 +64,6 @@ PinMeasure::PinMeasure(GPIO_TypeDef* port, uint16_t pin){
 }
 
 PinMeasure::PinMeasure(GPIO_TypeDef* port, uint16_t pin, float v1, float v2){
-  //rimossa l'opzione per fare i pin pullup (mi serviva?)
   this->port = port;
   this->pin = pin;
   setLimits(v1, v2);
@@ -122,12 +121,12 @@ Motor::Motor(PinControl &INA, PinControl &INB,
 Motor::Motor(PinControl INA, PinControl INB,
 			 TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
 			 PinMeasure END)
-  : pin_INA(INA), pin_INB(INB), htimPWM(htimPWM), CCRx(CCRx), htimENC(NULL), pin_END(END) {}
+  : pin_INA(INA), pin_INB(INB), htimPWM(htimPWM), CCRx(CCRx), htimENC(NULL), pin_END(END){}
 
 Motor::Motor(PinControl INA, PinControl INB,
 			 TIM_HandleTypeDef* htimPWM, uint8_t CCRx,
 			 TIM_HandleTypeDef* htimENC, PinMeasure END)
-  : pin_INA(INA), pin_INB(INB), htimPWM(htimPWM), CCRx(CCRx), htimENC(htimENC), pin_END(END) {}
+  : pin_INA(INA), pin_INB(INB), htimPWM(htimPWM), CCRx(CCRx), htimENC(htimENC), pin_END(END){}
 
 
 Motor::~Motor() {}
@@ -144,9 +143,6 @@ int16_t Motor::getEncoder(){
   }
 }
 
-void Motor::invertMotor(bool invert){
-  this->motor_invert = invert;
-}
 void Motor::driveMotor(int16_t spwm){
   OperatingMode mode = OperatingMode::BRAKE_GND;
   spwm = spwm > -(HALF_PWM+1) ? spwm : -(HALF_PWM+1);
@@ -154,9 +150,9 @@ void Motor::driveMotor(int16_t spwm){
   //spwm = (int16_t) std::min(std::max(spwm, (int16_t) -(HALF_PWM+1)), (int16_t) HALF_PWM);
 
   if(spwm > 0) {
-    mode = motor_invert ? OperatingMode::SPIN_CCW : OperatingMode::SPIN_CW;
+    mode = OperatingMode::SPIN_CW;
   } else if (spwm < 0) {
-    mode = motor_invert ? OperatingMode::SPIN_CW : OperatingMode::SPIN_CCW;
+    mode = OperatingMode::SPIN_CCW;
   } else {
     mode = OperatingMode::BRAKE_GND;
   }
@@ -488,28 +484,28 @@ Robot create_robot() {
 
 	myRobot.setEncoderDivider(0, ENC_1_DIV);
 	myRobot.getPID(0)->reset();
-	myRobot.getPID(0)->init((float) TS/1000.0, PID_1_POLE, PID_1_SAT, true);
 	myRobot.getPID(0)->setup(PID_1_KP, PID_1_KI, PID_1_KD);
+	myRobot.getPID(0)->init((float) TS/1000.0, PID_1_POLE, PID_1_SAT, true);
 
 	myRobot.setEncoderDivider(1, ENC_2_DIV);
 	myRobot.getPID(1)->reset();
-	myRobot.getPID(1)->init((float) TS/1000.0, PID_2_POLE, PID_2_SAT, true);
 	myRobot.getPID(1)->setup(PID_2_KP, PID_2_KI, PID_2_KD);
+	myRobot.getPID(1)->init((float) TS/1000.0, PID_2_POLE, PID_2_SAT, true);
 
 	myRobot.setEncoderDivider(2, ENC_3_DIV);
 	myRobot.getPID(2)->reset();
-	myRobot.getPID(2)->init((float) TS/1000.0, PID_3_POLE, PID_3_SAT, true);
 	myRobot.getPID(2)->setup(PID_3_KP, PID_3_KI, PID_3_KD);
+	myRobot.getPID(2)->init((float) TS/1000.0, PID_3_POLE, PID_3_SAT, true);
 
 	myRobot.setEncoderDivider(3, ENC_4_DIV);
 	myRobot.getPID(3)->reset();
-	myRobot.getPID(3)->init((float) TS/1000.0, PID_4_POLE, PID_4_SAT, true);
 	myRobot.getPID(3)->setup(PID_4_KP, PID_4_KI, PID_4_KD);
+	myRobot.getPID(3)->init((float) TS/1000.0, PID_4_POLE, PID_4_SAT, true);
 
 	myRobot.setEncoderDivider(4, ENC_5_DIV);
 	myRobot.getPID(4)->reset();
-	myRobot.getPID(4)->init((float) TS/1000.0, PID_5_POLE, PID_5_SAT, true);
 	myRobot.getPID(4)->setup(PID_5_KP, PID_5_KI, PID_5_KD);
+	myRobot.getPID(4)->init((float) TS/1000.0, PID_5_POLE, PID_5_SAT, true);
 
 	return myRobot;
 }

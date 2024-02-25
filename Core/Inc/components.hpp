@@ -99,8 +99,6 @@ public:
   };
 
   int16_t getEncoder();                // Return encoder ticks
-
-  void invertMotor(bool invert);    // Invert physical spin direction of the motor
   void driveMotor(short spwm);      // Assign pwm with sign for spin direction
 
   bool isInEndStop();               // Check if motor is at endstop
@@ -115,7 +113,6 @@ private:
   TIM_HandleTypeDef* htimENC;	// Handle del Timer relativo all'encoder
   //PinMeasure &pin_END;          // endstop switch
   PinMeasure pin_END;
-  bool motor_invert = false;    // If invert motor physical spin direction
 };
 
 
