@@ -4,8 +4,10 @@ void encoder_callback(const void* msgin) {
 	const racs_services__msg__Encoder* enc_msg =
 			(const racs_services__msg__Encoder*) msgin;
 
+	ScorBot.toggle(true);
 	ScorBot.setEncoders(enc_msg->encoders);
 	ScorBot.setStatus(Robot::Status::PID, false);
+	ScorBot.toggle(false);
 }
 
 void pwm_callback(const void* msgin) {

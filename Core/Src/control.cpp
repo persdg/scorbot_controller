@@ -48,8 +48,8 @@ float Integrator::evolve(float u)
 
 void Integrator::apply_saturation()
 {
-	x = x > +sat ? +sat : x;
-	x = x < -sat ? -sat : x;
+	//x = x > +sat ? +sat : x;
+	//x = x < -sat ? -sat : x;
 }
 
 
@@ -65,8 +65,9 @@ void PID::init(float ts, float tau, float sat, bool bumpless)
   this->derivator = Filter();
   this->lowPassFilter = Filter();
 
-  integrator.init(ts, 200);
-  derivator.init(tau, 1, 0, 1, ts);			// Td*s/(1+s*Td/N)
+  integrator.init(ts, 20000.0);
+  derivator.init(tau, 1, 1, 0, ts);			// Td*s/(1+s*Td/N)
+  lowPassFilter.init(0.1, 1, 0, 1, ts);
 }
 
 void PID::setup(float kp, float ki, float kd)
@@ -87,21 +88,23 @@ void PID::reset(float u2, float u3)
   this-> u3 = u3; //xd
 }
 
-void PID::input(float e)
+void PID::input(float r, float y)
 {
-  this->e = e;
+  this->r = r;
+  this->y = y;
+  this->e = r-y;
 }
 
 void PID::step()
 {
   bool sgn;
 
-  if (abs(e) > 0) {
+  if (abs(r-y) >= 0) {
 	  u1 = kp*e;
   	  u2 = ki*integrator.evolve(e);
   	  u3 = kd*derivator.evolve(e);
-  	  //sgn = (u1+u2+u3) >= 0;
-  	  u = apply_saturation(u1 + u2 + u3 /*+ (2*sgn-1)*9000*/);
+  	  sgn = (u1+u2+u3) >= 0;
+  	  u = apply_saturation(u1 + u2 + u3 + (2*sgn-1)*5500);
   } else
 	  u = 0;
 }
@@ -111,9 +114,9 @@ float PID::output()
   return u;
 }
 
-float PID::evolve(float e)
+float PID::evolve(float r, float y)
 {
-  input(e);
+  input(r,y);
   step();
   //u = output();
 
@@ -122,7 +125,7 @@ float PID::evolve(float e)
 
 void PID::show(int i, racs_services__msg__Debug &debug_msg)
 {
-	debug_msg.data[0] = (float) i;
+	debug_msg.data[0] = integrator.output();
 	debug_msg.data[1] = u1  *100.0/32767.0;
 	debug_msg.data[2] = u2  *100.0/32767.0;
 	debug_msg.data[3] = u3  *100.0/32767.0;
@@ -151,6 +154,7 @@ void Filter::init(float a1, float a0, float b1, float b0, float ts)
   this->b0 = b0;
 
   A = exp(-(a0/a1)*ts);
+  B = 1;
   if (a0*a1 != 0) {
 	  C = ((a0*b1-a1*b0)/(a0*a1))*(exp((-a0/a1)*ts)-1);
   }
@@ -158,7 +162,7 @@ void Filter::init(float a1, float a0, float b1, float b0, float ts)
   {
 	  C = 0;
   }
-  B = 1;
+
   if (a1 != 0) {
 	  D = b1/a1;
   } else

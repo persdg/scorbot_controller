@@ -65,10 +65,10 @@ public:
   void setup(float kp, float ki, float kd);
   void reset();
   void reset(float xi, float xd);
-  void input(float e);
+  void input(float r, float y);
   void step();
   float output();
-  float evolve(float e);
+  float evolve(float r, float y);
   void show(int i, racs_services__msg__Debug &debug_msg);
 
 private:
@@ -84,6 +84,8 @@ private:
   float kd = 0.0;
   
   float e = 0.0;
+  float y = 0.0;
+  float r = 0.0;
 
   float u1 = 0.0;
   float u2 = 0.0;

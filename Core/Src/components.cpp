@@ -351,6 +351,10 @@ void Robot::disableMotors(){
   pin_enable.set(false);
 }
 
+void Robot::toggle(bool in) {
+	pin_toggle.set(in);
+}
+
 void Robot::rcvCtrl(racs_services__srv__Control_Request* request){
 
   if(request->command > 2) {
@@ -406,9 +410,11 @@ void Robot::update(){
 
     case Status::PID:
       for(int i = 0; i < 1; i++){
-        float err = (float) (encoders[i] - getMotor(i)->getEncoder()) / ((error_div[i] == 0) ? 1.0 : error_div[i]);
-        float gettopiddo = getPID(i)->evolve(err);
-    	motors_pwm[i] = (int16_t) std::min(std::max((float) -(HALF_PWM+1), gettopiddo), (float) HALF_PWM);
+        float getpid = getPID(i)->evolve(
+        		encoders[i] / 				((error_div[i] == 0) ? 1.0 : error_div[i]),
+				getMotor(i)->getEncoder() / ((error_div[i] == 0) ? 1.0 : error_div[i])
+				);
+    	motors_pwm[i] = (int16_t) std::min(std::max((float) -(HALF_PWM+1), getpid), (float) HALF_PWM);
       }
       break;
 
@@ -431,10 +437,10 @@ void Robot::actuate(){
 }
 
 void Robot::cycle(){
-        pin_toggle.set(true);
+        //pin_toggle.set(true);
         update();
         actuate();
-        pin_toggle.set(false);
+        //pin_toggle.set(false);
 }
 
 Robot create_robot() {

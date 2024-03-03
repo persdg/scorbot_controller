@@ -19,7 +19,7 @@
 ../Core/Src/components.cpp:146:6:void Motor::driveMotor(int16_t)	24	static
 ../Core/Src/components.cpp:201:6:bool Motor::isInEndStop()	16	static
 ../Core/Inc/control.hpp:60:7:PID::~PID()	16	static
-../Core/Src/components.cpp:212:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t, Motor**, float*)	176	static
+../Core/Src/components.cpp:212:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t, Motor**, float*)	184	static
 ../Core/Src/components.cpp:242:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t, Motor**)	64	static
 ../Core/Src/components.cpp:245:1:Robot::Robot(PinControl, PinControl, long unsigned int, uint8_t)	64	static
 ../Core/Src/components.cpp:248:1:Robot::~Robot()	16	static
@@ -42,16 +42,17 @@
 ../Core/Src/components.cpp:337:6:void Robot::resetPWMs()	24	static
 ../Core/Src/components.cpp:344:6:void Robot::enableMotors()	16	static
 ../Core/Src/components.cpp:349:6:void Robot::disableMotors()	16	static
-../Core/Src/components.cpp:354:6:void Robot::rcvCtrl(racs_services__srv__Control_Request*)	24	static
-../Core/Src/components.cpp:380:6:void Robot::sndCtrl(racs_services__srv__Control_Response*)	16	static
-../Core/Src/components.cpp:384:6:void Robot::rcvSetup(racs_services__srv__Setup_Request*)	16	static
-../Core/Src/components.cpp:394:6:void Robot::sndSetup(racs_services__srv__Setup_Response*)	16	static
-../Core/Src/components.cpp:398:6:void Robot::update()	48	static
-../Core/Src/components.cpp:427:6:void Robot::actuate()	24	static
-../Core/Src/components.cpp:433:6:void Robot::cycle()	16	static
-../Core/Src/components.cpp:440:7:Robot create_robot()	768	static
+../Core/Src/components.cpp:354:6:void Robot::toggle(bool)	16	static
+../Core/Src/components.cpp:358:6:void Robot::rcvCtrl(racs_services__srv__Control_Request*)	24	static
+../Core/Src/components.cpp:384:6:void Robot::sndCtrl(racs_services__srv__Control_Response*)	16	static
+../Core/Src/components.cpp:388:6:void Robot::rcvSetup(racs_services__srv__Setup_Request*)	16	static
+../Core/Src/components.cpp:398:6:void Robot::sndSetup(racs_services__srv__Setup_Response*)	16	static
+../Core/Src/components.cpp:402:6:void Robot::update()	56	static
+../Core/Src/components.cpp:433:6:void Robot::actuate()	24	static
+../Core/Src/components.cpp:439:6:void Robot::cycle()	16	static
+../Core/Src/components.cpp:446:7:Robot create_robot()	768	static
 /home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:254:5:constexpr const _Tp& std::max(const _Tp&, const _Tp&) [with _Tp = float]	16	static
 /home/persdg/st/stm32cubeide_1.11.2_2/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.linux64_1.1.1.202309131626/tools/arm-none-eabi/include/c++/11.3.1/bits/stl_algobase.h:230:5:constexpr const _Tp& std::min(const _Tp&, const _Tp&) [with _Tp = float]	16	static
-../Core/Src/components.cpp:513:31:void __static_initialization_and_destruction_0(int, int)	16	static
-../Core/Src/components.cpp:513:31:cpp)	8	static
-../Core/Src/components.cpp:513:31:cpp)	8	static
+../Core/Src/components.cpp:519:31:void __static_initialization_and_destruction_0(int, int)	16	static
+../Core/Src/components.cpp:519:31:cpp)	8	static
+../Core/Src/components.cpp:519:31:cpp)	8	static

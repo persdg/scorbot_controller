@@ -168,6 +168,8 @@ public:
   void enableMotors();                          // Enable all motors
   void disableMotors();                         // Disable all motors
 
+  void toggle(bool);
+
   void rcvCtrl(racs_services__srv__Control_Request* request);     // Receive and process a control message from serial communication
   void sndCtrl(racs_services__srv__Control_Response* response);	// Make and send a control response to serial communication
   void rcvSetup(racs_services__srv__Setup_Request* request);                    							// Receive and process a setup message from serial communication
