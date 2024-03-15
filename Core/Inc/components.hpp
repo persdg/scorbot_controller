@@ -125,6 +125,7 @@ public:
   Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div);
   Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size, Motor **motors);
   Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size);
+  Robot();
   ~Robot();
 
   // Robot possible commands

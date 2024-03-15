@@ -104,7 +104,7 @@ void PID::step()
   	  u2 = ki*integrator.evolve(e);
   	  u3 = kd*derivator.evolve(e);
   	  sgn = (u1+u2+u3) >= 0;
-  	  u = apply_saturation(u1 + u2 + u3 + (2*sgn-1)*5500);
+  	  u = apply_saturation(u1 + u2 + u3 + (2*sgn-1)*10000);
   } else
 	  u = 0;
 }
@@ -169,11 +169,6 @@ void Filter::init(float a1, float a0, float b1, float b0, float ts)
   {
 	  D = 0;
   }
-
-  /*A = -(-2*a1+a0*ts)/(2*a1+a0*ts);
-  B = 1;
-  C = ((2*b1+b0*ts)/(2*a1+a0*ts)) * ((-2*a1+a0*ts)/(2*a1+a0*ts) + (-2*b1+b0*ts)/(2*b1+b0*ts));
-  D = ((2*b1+b0*ts)/(2*a1+a0*ts));*/
 }
 
 void Filter::reset()

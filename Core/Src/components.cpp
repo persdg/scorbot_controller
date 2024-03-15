@@ -207,6 +207,8 @@ bool Motor::isInEndStop(){
 // Robot
 // ==================================================
 
+Robot::Robot() {}
+
 /*Robot::Robot(PinControl &enable, PinControl &toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div)
   : motors(motors), error_div(encs_div), pin_enable(enable), pin_toggle(toggle) {*/
 Robot::Robot(PinControl enable, PinControl toggle, unsigned long ts_ms, uint8_t size, Motor **motors, float *encs_div)
@@ -264,7 +266,6 @@ Robot::Status Robot::getStatus(){
 
 void Robot::setStatus(Status status, bool reset = false){
   if(this->status != status || reset){
-    //resetPWMs(); riga non necessaria?
     resetPIDs();
     this->status = status;
   }
@@ -437,10 +438,8 @@ void Robot::actuate(){
 }
 
 void Robot::cycle(){
-        //pin_toggle.set(true);
         update();
         actuate();
-        //pin_toggle.set(false);
 }
 
 Robot create_robot() {

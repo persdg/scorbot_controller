@@ -1,2 +1,1 @@
-uint8 num_motors
-int16[6] encoders
+int16[5] encoders

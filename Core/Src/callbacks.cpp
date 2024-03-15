@@ -14,11 +14,6 @@ void pwm_callback(const void* msgin) {
 	const racs_services__msg__DirectAccess* pwm_msg =
 		(const racs_services__msg__DirectAccess*) msgin;
 
-	if(pwm_msg->num_motors != ScorBot.getSize()) {
-	    ScorBot.setStatus(Robot::Status::Idle, true);
-	    return;
-	}
-
 	ScorBot.setPWMs(pwm_msg->pwms);
 	ScorBot.setStatus(Robot::Status::DAQ, false);
 }
@@ -51,15 +46,10 @@ void feedback_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 		racs_services__msg__Debug debug;
 		rcl_ret_t rc;
 
-		int size = ScorBot.getSize();
-		feedback.num_motors = size;
-		for(uint8_t i = 0; i < size; i++) {
+		for(uint8_t i = 0; i < 5; i++) {
 			feedback.encoders[i] = ScorBot.getEncoder(i);
 		}
 
-		for(uint8_t i = 6; i > size; i--) {
-			feedback.encoders[i] = 0;
-		}
 		rc = rcl_publish(&feedback_publisher, &feedback, NULL);
 		if (rc != RCL_RET_OK) return;
 
@@ -73,10 +63,8 @@ void feedback_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 
 void robot_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 {
-	//UNUSED(timer);
 	UNUSED(last_call_time);
 	if (timer != NULL) {
 		ScorBot.cycle();
 	}
-
 }

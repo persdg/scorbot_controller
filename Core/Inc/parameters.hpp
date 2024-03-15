@@ -13,11 +13,15 @@
 #define KU			630.0
 #define TU			0.16666
 
-#define PID_1_KP    KU*0.6 	  // Motor 1 PID proportional coefficient
-#define PID_1_KI    TU*0.5    // Motor 1 PID integral coefficient
-#define PID_1_KD    TU*0.125  // Motor 1 PID derivative coefficient
-#define PID_1_POLE  0.5       // Motor 1 PID dirty derivative pole
-#define PID_1_SAT   10000.0   // Motor 1 PID integral saturation
+//#define PID_1_KP    KU*0.6 	  // Motor 1 PID proportional coefficient
+//#define PID_1_KI    TU*0.5    // Motor 1 PID integral coefficient
+//#define PID_1_KD    TU*0.125  // Motor 1 PID derivative coefficient
+#define PID_1_KP	250.0
+#define PID_1_KI	0.0
+#define PID_1_KD	15.0
+#define PID_1_POLE  0.25      // Motor 1 PID dirty derivative pole
+//#define PID_1_POLE  0.10
+#define PID_1_SAT   20000.0   // Motor 1 PID integral saturation
 
 #define PID_2_KP    300.0     // Motor 1 PID proportional coefficient
 #define PID_2_KI    100       // Motor 1 PID integral coefficient

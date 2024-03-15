@@ -1,5 +1,5 @@
 uint8 num_motors
 uint8 command
-int16[6] encoders
+int16[5] encoders
 ---
 uint8 response
