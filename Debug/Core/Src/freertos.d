@@ -250,7 +250,7 @@ Core/Src/freertos.o: ../Core/Src/freertos.cpp \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__struct.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__functions.h \
  ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__type_support.h \
- ../Core/Inc/tim.h ../Core/Inc/callbacks.hpp
+ ../Core/Inc/tim.h ../Core/Inc/callbacks.hpp ../Core/Inc/parameters.hpp
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -509,3 +509,4 @@ Core/Src/freertos.o: ../Core/Src/freertos.cpp \
 ../micro_ros_stm32cubemx_utils/microros_static_library_ide/libmicroros/include/racs_services/msg/detail/debug__type_support.h:
 ../Core/Inc/tim.h:
 ../Core/Inc/callbacks.hpp:
+../Core/Inc/parameters.hpp:

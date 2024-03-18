@@ -4,3 +4,4 @@
 ../Core/Src/callbacks.cpp:30:6:void setup_callback(const void*, void*)	24	static
 ../Core/Src/callbacks.cpp:39:6:void feedback_timer_callback(rcl_timer_t*, int64_t)	80	static
 ../Core/Src/callbacks.cpp:64:6:void robot_timer_callback(rcl_timer_t*, int64_t)	24	static
+../Core/Src/callbacks.cpp:72:6:void encoder_timer_callback(rcl_timer_t*, int64_t)	48	static

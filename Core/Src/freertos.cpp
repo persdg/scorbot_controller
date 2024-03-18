@@ -45,6 +45,7 @@
 #include <micro_ros_allocators.h>
 #include <components.hpp>
 #include <callbacks.hpp>
+#include <parameters.hpp>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,6 +68,8 @@
 extern Robot ScorBot;
 rcl_publisher_t feedback_publisher;
 rcl_publisher_t debug_publisher;
+rcl_publisher_t encoder_publisher;
+int16_t encs[2000];
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -78,7 +81,7 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-
+void load_encoders(int16_t* encs);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -152,16 +155,19 @@ void StartDefaultTask(void *argument)
 	if (!rcutils_set_default_allocator(&freeRTOS_allocator)) return;
 
 	rcl_ret_t rc;
-	rcl_node_t node; // nodo;
-	rcl_timer_t feedback_timer, robot_timer;
-	const unsigned int feedback_timer_period = RCL_MS_TO_NS(10);
-	const unsigned int robot_timer_period = RCL_MS_TO_NS(10);
-	//rcl_publisher_t feedback_publisher; // publisher
+	rcl_node_t node, node2; // nodo;
+	rcl_timer_t feedback_timer, robot_timer, encoder_timer;
+	const unsigned int feedback_timer_period = RCL_MS_TO_NS(20);
+	const unsigned int robot_timer_period = RCL_MS_TO_NS(TS);
+	const unsigned int encoder_timer_period = RCL_MS_TO_NS(20);
+	//rcl_publisher_t feedback_publisher; // publishers
+	//rcl_publisher_t encoder_publisher;
 	rcl_subscription_t pwm_subscriber, encoder_subscriber;
 	rcl_service_t setup_service, control_service; //servizi
 
 	const char* feedback_publisher_name = "/feedback";	//publishers
 	const char* debug_publisher_name = "/debug";
+	const char* encoder_publisher_name = "/encoder";
 	const char* pwm_subscriber_name = "/pwm";			//subscribers
 	const char* encoder_subscriber_name = "/encoder";
 	const char* setup_service_name = "/setup";			//servizi
@@ -175,9 +181,9 @@ void StartDefaultTask(void *argument)
 		ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, Encoder);
 	const rosidl_message_type_support_t * debug_type_support =
 		ROSIDL_GET_MSG_TYPE_SUPPORT(racs_services, msg, Debug);
-	const rosidl_service_type_support_t* setup_type_support =
+	const rosidl_service_type_support_t * setup_type_support =
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Setup);
-	const rosidl_service_type_support_t* control_type_support =
+	const rosidl_service_type_support_t * control_type_support =
 		ROSIDL_GET_SRV_TYPE_SUPPORT(racs_services, srv, Control);
 
 	rclc_support_t support;// support_p;
@@ -202,7 +208,13 @@ void StartDefaultTask(void *argument)
 	rc = rclc_timer_init_default(&robot_timer, &support, robot_timer_period, robot_timer_callback);
 	if (rc != RCL_RET_OK) return;
 
+	rc = rclc_timer_init_default(&encoder_timer, &support, encoder_timer_period, encoder_timer_callback);
+	if (rc != RCL_RET_OK) return;
+
 	rc = rclc_node_init_default(&node, "STM32_node", "", &support);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_node_init_default(&node2, "STM32_node", "", &support);
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_publisher_init_best_effort(
@@ -211,6 +223,10 @@ void StartDefaultTask(void *argument)
 
 	rc = rclc_publisher_init_best_effort(
 	  &debug_publisher, &node, debug_type_support, debug_publisher_name);
+	if (rc != RCL_RET_OK) return;
+
+	rc = rclc_publisher_init_best_effort(
+	  &encoder_publisher, &node2, encoder_type_support, encoder_publisher_name);
 	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_subscription_init_best_effort(
@@ -231,7 +247,7 @@ void StartDefaultTask(void *argument)
 
 	rclc_executor_t executor;
 	executor = rclc_executor_get_zero_initialized_executor();
-	unsigned int num_handles = 6; //2 servizi, 2 timer e 2 subs
+	unsigned int num_handles = 7; //2 servizi, 3 timer e 2 subs
 	rclc_executor_init(&executor, &support.context, num_handles, &allocator);
 
 	rc = rclc_executor_add_timer(&executor, &feedback_timer);
@@ -239,6 +255,9 @@ void StartDefaultTask(void *argument)
 
 	rc = rclc_executor_add_timer(&executor, &robot_timer);
 	if (rc != RCL_RET_OK) return;
+
+//	rc = rclc_executor_add_timer(&executor, &encoder_timer);
+//	if (rc != RCL_RET_OK) return;
 
 	rc = rclc_executor_add_subscription(
 	  &executor, &pwm_subscriber, &pwm_msg,
@@ -261,6 +280,7 @@ void StartDefaultTask(void *argument)
 	if (rc != RCL_RET_OK) return;
 
 	Robot ScorBot = create_robot();
+	load_encoders(encs);
 
 	rclc_executor_spin(&executor);
   /* Infinite loop */
@@ -273,6 +293,10 @@ void StartDefaultTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
-
+void load_encoders(int16_t encs[]) {
+	for(int i = 0; i < 2000; i++) {
+		encs[i] = 300*sin(2*M_PI*i/2000.0);
+	}
+}
 /* USER CODE END Application */
 

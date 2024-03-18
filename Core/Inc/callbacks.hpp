@@ -15,6 +15,8 @@
 extern Robot ScorBot;
 extern rcl_publisher_t feedback_publisher;
 extern rcl_publisher_t debug_publisher;
+extern rcl_publisher_t encoder_publisher;
+extern int16_t encs[];
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,6 +28,7 @@ void control_callback(const void* request_msg, void* response_msg);
 void setup_callback(const void* request_msg, void* response_msg);
 void feedback_timer_callback(rcl_timer_t* timer, int64_t last_call_time);
 void robot_timer_callback(rcl_timer_t* timer, int64_t last_call_time);
+void encoder_timer_callback(rcl_timer_t* timer, int64_t last_call_time);
 
 #ifdef __cplusplus
 }

@@ -1,2 +1,3 @@
-../Core/Src/freertos.cpp:93:6:void MX_FREERTOS_Init()	1
-../Core/Src/freertos.cpp:135:6:void StartDefaultTask(void*)	18
+../Core/Src/freertos.cpp:96:6:void MX_FREERTOS_Init()	1
+../Core/Src/freertos.cpp:138:6:void StartDefaultTask(void*)	21
+../Core/Src/freertos.cpp:296:6:void load_encoders(int16_t*)	2

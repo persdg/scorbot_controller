@@ -10,6 +10,7 @@
 #define ENC_5_DIV   1.0  // Motor 5 divider for encoder error in PID mode
 #define ENC_6_DIV   1.0  // Motor 6 divider for encoder error in PID mode
 
+#define TS			1
 #define KU			630.0
 #define TU			0.16666
 

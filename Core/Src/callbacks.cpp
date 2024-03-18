@@ -1,6 +1,6 @@
 #include <callbacks.hpp>
 
-void encoder_callback(const void* msgin) {
+void encoder_callback(const void* msgin) { //5 ms di ricezione
 	const racs_services__msg__Encoder* enc_msg =
 			(const racs_services__msg__Encoder*) msgin;
 
@@ -67,4 +67,21 @@ void robot_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 	if (timer != NULL) {
 		ScorBot.cycle();
 	}
-}
+} // 70 us
+
+void encoder_timer_callback(rcl_timer_t* timer, int64_t last_call_time)
+{
+	UNUSED(last_call_time);
+	racs_services__msg__Encoder enc_msg;
+	rcl_ret_t rc;
+	static uint16_t i = 0;
+	enc_msg.encoders[0] = encs[i];
+	i = (i >= 1999) ? 0 : i+1;
+	for (int i = 1; i < 5; i++) {
+		enc_msg.encoders[i] = 0;
+	}
+	if (timer != NULL) {
+		rc = rcl_publish(&encoder_publisher, &enc_msg, NULL);
+		if (rc != RCL_RET_OK) return;
+	}
+} // 3 ms
